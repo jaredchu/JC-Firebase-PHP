@@ -1,0 +1,16 @@
+{
+    "name": "jaredchu/jc-firebase-php",
+    "description": "Firebase PHP RESTful library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jared Chu",
+            "email": "jared@vmcsoft.com"
+        }
+    ],
+    "require": {
+        "rmccue/requests": "^1.7",
+        "firebase/token-generator": "^3.0"
+    }
+}
