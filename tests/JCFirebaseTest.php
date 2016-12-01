@@ -10,7 +10,7 @@
 use JCFirebase\JCFirebase;
 use PHPUnit\Framework\TestCase;
 
-class JCFirebaseTest extends TestCase
+class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
     const FIREBASE_SECRET = '';
     const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
