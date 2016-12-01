@@ -2,7 +2,7 @@ build:
     tests:
         override:
             -
-                command: phpunit --coverage-clover=tests/JCFirebaseTest.php
+                command: phpunit --coverage-clover=coverage.clover
                 coverage:
-                    file: JCFirebaseTest.php
+                    file: coverage.clover
                     format: php-clover

@@ -63,7 +63,10 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         ));
 
         $getRequestObjects = json_decode($getRequest->body);
-        $firstObject = current($getRequestObjects);
+        $firstObject = new stdClass();
+        if(current($getRequestObjects) !== false){
+            $firstObject = current($getRequestObjects);
+        }
         self::assertEquals(1,$firstObject->number);
         self::assertEquals('hello',$firstObject->string);
     }
