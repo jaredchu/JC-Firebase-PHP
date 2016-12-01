@@ -6,7 +6,6 @@
  * Date: 11/29/16
  * Time: 4:07 PM
  */
-require_once "../src/JCFirebase.php";
 
 use JCFirebase\JCFirebase;
 use PHPUnit\Framework\TestCase;
