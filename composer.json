@@ -17,7 +17,9 @@
         "phpunit/phpunit": "5.6.*"
     },
     "autoload": {
-        "classmap": ["src"]
+      "psr-4": {
+        "JCFirebase\\JCFirebase\\": "src"
+      }
     },
     "keywords": [
         "firebase",
