@@ -8,6 +8,7 @@
  */
 
 use JCFirebase\JCFirebase;
+use JCFirebase\JCFirebaseOption;
 use PHPUnit\Framework\TestCase;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /*public function testGet(){
+    public function testGet(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
 
         $request = $firebase->get();
@@ -88,9 +89,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $request = $firebase->delete($subPath);
 
         self::assertEquals(200,$request->status_code);
-    }*/
+    }
 
-    public function testGetWithShallow(){
+    public function testGetShallow(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
         $subPath = 'get_shallow_test';
 
@@ -100,5 +101,17 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         self::assertEquals(200,$request->status_code);
         self::assertTrue(json_decode($request->body)->number);
         self::assertTrue(json_decode($request->body)->string);
+    }
+
+    public function testGetPrint(){
+        $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
+
+        self::assertContains(" ",$firebase->get(null,array(
+            JCFirebaseOption::OPTION_PRINT=>JCFirebaseOption::PRINT_PRETTY
+        ))->body);
+
+        self::assertEquals(204,$firebase->get(null,array(
+            JCFirebaseOption::OPTION_PRINT=>JCFirebaseOption::PRINT_SILENT
+        ))->status_code);
     }
 }
