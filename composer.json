@@ -18,7 +18,8 @@
     },
     "autoload": {
       "psr-4": {
-        "JCFirebase\\JCFirebase\\": "src"
+        "JCFirebase\\": "src/",
+        "\\jaredchuJCFirebase\\": ""
       }
     },
     "keywords": [

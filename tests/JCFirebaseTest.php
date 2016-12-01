@@ -7,7 +7,7 @@
  * Time: 4:07 PM
  */
 
-use JCFirebase\JCFirebase as JCFirebase;
+use JCFirebase\JCFirebase;
 use PHPUnit\Framework\TestCase;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
