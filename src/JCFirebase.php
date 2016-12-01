@@ -38,15 +38,11 @@ class JCFirebase
     }
 
     public function getPathURI($path = '',$print = ''){
-        //remove .json or last slash from firebaseURI
-        $templates = array(
-            '.json',
-            '/.json',
-            '/'
-        );
-        foreach ($templates as $template){
-            $this->firebaseURI = rtrim($this->firebaseURI,$template);
-        }
+        //remove last slash from firebaseURI
+        $template = '/';
+	    $this->firebaseURI = rtrim($this->firebaseURI,$template);
+	    $path = rtrim($path,$template);
+	    $path = ltrim($path,$template);
 
         //check https
         if(strpos($this->firebaseURI, 'http://') !== false){
@@ -54,19 +50,22 @@ class JCFirebase
         }
 
         //check firebaseURI
-        if(strlen($this->firebaseURI) == 0){
+        if(empty($this->firebaseURI)){
             throw new \Exception("firebase URI is required");
+        }
+
+        if(strpos($this->firebaseDefaultPath,"/") !== 0){
+        	throw new \Exception("firebase default path must contain /");
         }
 
         $pathURI = $this->firebaseURI.$this->firebaseDefaultPath.$path.".json";
 
+        //set query data
         $queryData = array();
-
-        if(strlen($print) > 0){
+        if(!empty($print)){
             $queryData[JCFirebaseOption::OPTION_PRINT] = $print;
         }
-
-        if(count($queryData) > 0){
+        if(!empty($queryData)){
             $pathURI = $pathURI . '?' . http_build_query($queryData);
         }
 
@@ -128,14 +127,14 @@ class JCFirebase
         return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
     }
 
-    protected function mergeRequestOptions($options = array(),$encode = false){
+    protected function mergeRequestOptions($options = array(),$jsonEncode = false){
         $requestOptions = array();
 
         if(isset($options['data'])){
             $requestOptions = array_merge($options['data'],$requestOptions);
         }
 
-        if($encode){
+        if($jsonEncode){
             $requestOptions = json_encode($requestOptions);
         }
 
@@ -149,6 +148,6 @@ class JCFirebase
                 $print = $options['print'];
             }
         }
-        return $pathURI = $this->getPathURI($path,$print);
+        return $this->getPathURI($path,$print);
     }
 }
