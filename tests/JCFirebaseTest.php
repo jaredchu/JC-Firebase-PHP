@@ -14,10 +14,13 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
     const FIREBASE_SECRET = '';
     const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
-    const TEST_DATA = array(
-        'number' => 1,
-        'string' => 'hello'
-    );
+
+    private function data(){
+        return array(
+            'number' => 1,
+            'string' => 'hello'
+        );
+    }
 
     public function testGet(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
@@ -31,7 +34,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $sub_path = 'put_test';
 
         $request = $firebase->put($sub_path,array(
-            'data' => self::TEST_DATA
+            'data' => self::data()
         ));
 
         self::assertEquals(200,$request->status_code);
@@ -44,7 +47,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $sub_path = 'post_test';
 
         $request = $firebase->post($sub_path,array(
-            'data' => self::TEST_DATA
+            'data' => self::data()
         ));
 
         self::assertEquals(200,$request->status_code);
@@ -57,7 +60,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $sub_path = 'patch_test';
 
         $firebase->put($sub_path, array(
-            'data' => self::TEST_DATA
+            'data' => self::data()
         ));
 
         $request = $firebase->patch($sub_path, array(
@@ -77,7 +80,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $sub_path = 'delete_test';
 
         $firebase->put($sub_path,array(
-            'data' => self::TEST_DATA
+            'data' => self::data()
         ));
 
         $sub_path = 'delete_test/number';
