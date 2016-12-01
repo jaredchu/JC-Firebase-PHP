@@ -81,35 +81,43 @@ class JCFirebase
 
 
     /**
-     * @param array $option
+     * @param array $options
      * @return \Requests_Response
      */
     public function get($path = '',$options = array()){
-        if(isset($options['settings'])) {
-            $requestOptions = array_merge($options['settings'],$this->requestOptions);
-        }
-        else{
-            $requestOptions = $this->requestOptions;
-        }
-
-        return Requests::get($this->getPathURI($path),$this->requestHeader,$requestOptions);
+        return Requests::get($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
     }
 
     public function put($path = '',$options = array()){
-        $requestOptions = array_merge($options['data'],$this->requestOptions);
-        return Requests::put($this->getPathURI($path),$this->requestHeader,json_encode($requestOptions));
+        return Requests::put($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
     public function post($path = '',$options = array()){
-        $requestOptions = array_merge($options['data'],$this->requestOptions);
-        return Requests::post($this->getPathURI($path),$this->requestHeader,json_encode($requestOptions));
+        return Requests::post($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
     public function patch($path = '',$options = array()){
-        return Requests::patch($this->getPathURI($path),$this->requestHeader,$this->requestOptions);
+        return Requests::patch($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
     public function delete($path = '',$options = array()){
-        return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->requestOptions);
+        return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
+    }
+
+    protected function mergeRequestOptions($options = array(),$encode = false){
+        $requestOptions = array();
+        if(isset($options['settings'])){
+            $requestOptions = array_merge($options['settings'],$requestOptions);
+        }
+
+        if(isset($options['data'])){
+            $requestOptions = array_merge($options['data'],$requestOptions);
+        }
+
+        if($encode){
+            $requestOptions = json_encode($requestOptions);
+        }
+
+        return $requestOptions;
     }
 }
