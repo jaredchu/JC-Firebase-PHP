@@ -1,6 +1,9 @@
 tools:
     external_code_coverage: true
 build:
+    environment:
+            php:
+                version: 5.6
     tests:
         override:
             -
