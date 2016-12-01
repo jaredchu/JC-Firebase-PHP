@@ -22,7 +22,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGet(){
+    /*public function testGet(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
 
         $request = $firebase->get();
@@ -31,9 +31,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testPut(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
-        $sub_path = 'put_test';
+        $subPath = 'put_test';
 
-        $request = $firebase->put($sub_path,array(
+        $request = $firebase->put($subPath,array(
             'data' => self::data()
         ));
 
@@ -44,9 +44,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testPost(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
-        $sub_path = 'post_test';
+        $subPath = 'post_test';
 
-        $request = $firebase->post($sub_path,array(
+        $request = $firebase->post($subPath,array(
             'data' => self::data()
         ));
 
@@ -57,13 +57,13 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
     public function testPatch()
     {
         $firebase = new JCFirebase(self::FIREBASE_URI, self::FIREBASE_SECRET);
-        $sub_path = 'patch_test';
+        $subPath = 'patch_test';
 
-        $firebase->put($sub_path, array(
+        $firebase->put($subPath, array(
             'data' => self::data()
         ));
 
-        $request = $firebase->patch($sub_path, array(
+        $request = $firebase->patch($subPath, array(
             'data' => array(
                 'number' => 2,
                 'string' => 'hello2'
@@ -77,16 +77,28 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testDelete(){
         $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
-        $sub_path = 'delete_test';
+        $subPath = 'delete_test';
 
-        $firebase->put($sub_path,array(
+        $firebase->put($subPath,array(
             'data' => self::data()
         ));
 
-        $sub_path = 'delete_test/number';
+        $subPath = 'delete_test/number';
 
-        $request = $firebase->delete($sub_path);
+        $request = $firebase->delete($subPath);
 
         self::assertEquals(200,$request->status_code);
+    }*/
+
+    public function testGetWithShallow(){
+        $firebase = new JCFirebase(self::FIREBASE_URI,self::FIREBASE_SECRET);
+        $subPath = 'get_shallow_test';
+
+        $firebase->put($subPath,array('data' => self::data()));
+
+        $request = $firebase->getShallow($subPath);
+        self::assertEquals(200,$request->status_code);
+        self::assertTrue(json_decode($request->body)->number);
+        self::assertTrue(json_decode($request->body)->string);
     }
 }

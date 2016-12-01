@@ -17,34 +17,18 @@ use Requests;
  */
 class JCFirebase
 {
+    const OPTION_SHALLOW = 'shallow';
+
     public $firebaseSecret;
     public $firebaseURI;
     public $firebaseDefaultPath;
-
-    public $auth;
-    public $shallow;
-    public $print;
-    public $callback;
-    public $format;
-    public $download;
-    public $orderBy;
-    public $limitToFirst;
-    public $limitToLast;
-    public $startAt;
-    public $endAt;
-    public $equalTo;
-
-    public $streaming = 'text/event-stream';
-    public $priority = '.priority';
-    public $serverValues = '.sv';
-
-    public $rulePath = '.settings/rules.json';
 
     public $requestHeader = array(
         'accept' => 'application/json',
         'contentType' => 'application/json; charset=utf-8',
         'dataType' => 'json'
     );
+
     public $requestOptions = array();
 
     public function __construct($firebaseURI,$firebaseSecret = '',$firebaseDefaultPath = '/')
@@ -79,8 +63,8 @@ class JCFirebase
         return $pathURI;
     }
 
-
     /**
+     * @param string $path
      * @param array $options
      * @return \Requests_Response
      */
@@ -88,27 +72,49 @@ class JCFirebase
         return Requests::get($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
     }
 
+    public function getShallow($path = '',$options = array()){
+        return Requests::get($this->getPathURI($path). '?' . http_build_query(array(self::OPTION_SHALLOW => 'true')),
+            $this->mergeRequestOptions($options));
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
     public function put($path = '',$options = array()){
         return Requests::put($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
     public function post($path = '',$options = array()){
         return Requests::post($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
     public function patch($path = '',$options = array()){
         return Requests::patch($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
     public function delete($path = '',$options = array()){
         return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
     }
 
     protected function mergeRequestOptions($options = array(),$encode = false){
         $requestOptions = array();
-        if(isset($options['settings'])){
-            $requestOptions = array_merge($options['settings'],$requestOptions);
-        }
 
         if(isset($options['data'])){
             $requestOptions = array_merge($options['data'],$requestOptions);
