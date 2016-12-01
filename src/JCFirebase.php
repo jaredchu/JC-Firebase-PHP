@@ -40,14 +40,21 @@ class JCFirebase
 
     public $rulePath = '.settings/rules.json';
 
-    public function __construct($firebaseSecret,$firebaseURI,$firebaseDefaultPath = '/')
+    public $requestHeader = array(
+        'accept' => 'application/json',
+        'contentType' => 'application/json; charset=utf-8',
+        'dataType' => 'json'
+    );
+    public $requestOptions = array();
+
+    public function __construct($firebaseURI,$firebaseSecret = '',$firebaseDefaultPath = '/')
     {
         $this->firebaseSecret = $firebaseSecret;
         $this->firebaseURI = $firebaseURI;
         $this->firebaseDefaultPath = $firebaseDefaultPath;
     }
 
-    protected function getPathURI(){
+    public function getPathURI($path = ''){
         //remove .json or last slash from firebaseURI
         $templates = array(
             '.json',
@@ -60,31 +67,49 @@ class JCFirebase
 
         //check https
         if(strpos($this->firebaseURI, 'http://') !== false){
-            throw new \Exception("");
+            throw new \Exception("https is required.");
         }
 
-        if(strpos($this->firebaseURI, 'https://') == false){
-            $this->firebaseURI = 'https://'.$this->firebaseURI;
+        //check firebaseURI
+        if(strlen($this->firebaseURI) == 0){
+            throw new \Exception("firebase URI is required");
         }
+
+        $pathURI = $this->firebaseURI.$this->firebaseDefaultPath.$path.".json";
+        return $pathURI;
     }
 
-    public function get($option = array()){
 
+    /**
+     * @param array $option
+     * @return \Requests_Response
+     */
+    public function get($path = '',$options = array()){
+        if(isset($options['settings'])) {
+            $requestOptions = array_merge($options['settings'],$this->requestOptions);
+        }
+        else{
+            $requestOptions = $this->requestOptions;
+        }
+
+        return Requests::get($this->getPathURI($path),$this->requestHeader,$requestOptions);
     }
 
-    public function put(){
-
+    public function put($path = '',$options = array()){
+        $requestOptions = array_merge($options['data'],$this->requestOptions);
+        return Requests::put($this->getPathURI($path),$this->requestHeader,json_encode($requestOptions));
     }
 
-    public function post(){
-
+    public function post($path = '',$options = array()){
+        $requestOptions = array_merge($options['data'],$this->requestOptions);
+        return Requests::post($this->getPathURI($path),$this->requestHeader,json_encode($requestOptions));
     }
 
-    public function patch(){
-
+    public function patch($path = '',$options = array()){
+        return Requests::patch($this->getPathURI($path),$this->requestHeader,$this->requestOptions);
     }
 
-    public function delete(){
-
+    public function delete($path = '',$options = array()){
+        return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->requestOptions);
     }
 }
