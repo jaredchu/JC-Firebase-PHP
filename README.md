@@ -11,9 +11,12 @@ PHP library access Firebase RESTful API
 `composer require jaredchu/jc-firebase-php`
 
 ## Usage
+Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get your `private-key` and `service-email`.
+
 ```php
 use JCFirebase\JCFirebase;
-$firebase = new JCFirebase('https://your-firebase-url',array('secret'=>'xxx','uid'=>'xxx'));
+$firebase = new JCFirebase('https://your-firebase-url',
+array('key'=>'your-private-key','iss'=>'your-service-email'));
 $response = $firebase->get();
 echo $response->status_code;
 echo $response->body;
