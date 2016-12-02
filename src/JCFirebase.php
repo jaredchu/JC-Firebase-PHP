@@ -10,6 +10,7 @@ namespace JCFirebase;
 
 use Requests;
 use JCFirebase\JCFirebaseOption;
+use JCFirebase\OAuth;
 
 /**
  * Class JCFirebase
@@ -18,9 +19,14 @@ use JCFirebase\JCFirebaseOption;
  */
 class JCFirebase
 {
-    public $firebaseSecret;
     public $firebaseURI;
     public $firebaseDefaultPath;
+
+
+    /**
+     * @var OAuth
+     */
+    protected $auth;
 
     public $requestHeader = array(
         'accept' => 'application/json',
@@ -30,11 +36,17 @@ class JCFirebase
 
     public $requestOptions = array();
 
-    public function __construct($firebaseURI,$firebaseSecret = '',$firebaseDefaultPath = '/')
+    public function __construct($firebaseURI,$firebaseSerivceAccount = '',$firebaseDefaultPath = '/')
     {
-        $this->firebaseSecret = $firebaseSecret;
         $this->firebaseURI = $firebaseURI;
         $this->firebaseDefaultPath = $firebaseDefaultPath;
+        $this->setAuth($firebaseSerivceAccount);
+    }
+
+    public function setAuth($firebaseServiceAccount){
+        if(isset($firebaseServiceAccount['key']) && isset($firebaseServiceAccount['iss'])){
+            $this->auth = new OAuth($firebaseServiceAccount['key'],$firebaseServiceAccount['iss']);
+        }
     }
 
     public function getPathURI($path = '',$print = ''){
@@ -78,6 +90,8 @@ class JCFirebase
      * @return \Requests_Response
      */
     public function get($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::get(
             $this->mergeRequestPathURI($path,$options),$this->requestHeader,
             $this->mergeRequestOptions($options)
@@ -85,8 +99,11 @@ class JCFirebase
     }
 
     public function getShallow($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::get($this->getPathURI(
             $path). '?' . http_build_query(array(JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE)),
+            $this->requestHeader,
             $this->mergeRequestOptions($options)
         );
     }
@@ -97,6 +114,8 @@ class JCFirebase
      * @return \Requests_Response
      */
     public function put($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::put($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
@@ -106,6 +125,8 @@ class JCFirebase
      * @return \Requests_Response
      */
     public function post($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::post($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
@@ -115,6 +136,8 @@ class JCFirebase
      * @return \Requests_Response
      */
     public function patch($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::patch($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options,true));
     }
 
@@ -124,6 +147,8 @@ class JCFirebase
      * @return \Requests_Response
      */
     public function delete($path = '',$options = array()){
+        $this->refreshToken();
+
         return Requests::delete($this->getPathURI($path),$this->requestHeader,$this->mergeRequestOptions($options));
     }
 
@@ -149,5 +174,9 @@ class JCFirebase
             }
         }
         return $this->getPathURI($path,$print);
+    }
+
+    protected function refreshToken(){
+        $this->requestHeader['Authorization'] = 'Bearer '. $this->auth->getAccessToken();
     }
 }
