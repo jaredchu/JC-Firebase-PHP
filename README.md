@@ -11,13 +11,11 @@ composer require jaredchu/jc-firebase-php
 
 ## Usage
 ```php
-<?php
-    use JCFirebase\JCFirebase;
-    $firebase = new JCFirebase('https://your-firebase-url',array('secret'=>'xxx','uid'=>'xxx'));
-    $response = $firebase->get();
-    echo $response->status_code;
-    echo $response->body;
-?>
+use JCFirebase\JCFirebase;
+$firebase = new JCFirebase('https://your-firebase-url',array('secret'=>'xxx','uid'=>'xxx'));
+$response = $firebase->get();
+echo $response->status_code;
+echo $response->body;
 ```
 
 ## Contributing
@@ -28,4 +26,4 @@ composer require jaredchu/jc-firebase-php
 5. Submit a pull request.
 
 ## License
-MIT License
+[MIT License](https://github.com/jaredchu/JC-Firebase-PHP/blob/master/README.md)
