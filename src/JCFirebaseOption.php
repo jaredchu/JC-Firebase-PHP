@@ -27,13 +27,14 @@ class JCFirebaseOption
     const REQ_TYPE_PATCH = 3;
     const REQ_TYPE_DELETE = 4;
 
-    public static function isAllowPrint($reqType = self::REQ_TYPE_GET,$pType = self::PRINT_PRETTY){
-        if($pType == self::PRINT_PRETTY){
+    public static function isAllowPrint($reqType = self::REQ_TYPE_GET, $pType = self::PRINT_PRETTY)
+    {
+        if ($pType == self::PRINT_PRETTY) {
             return true;
         }
 
-        if($pType == self::PRINT_SILENT){
-            if($reqType == self::REQ_TYPE_DELETE){
+        if ($pType == self::PRINT_SILENT) {
+            if ($reqType == self::REQ_TYPE_DELETE) {
                 return false;
             }
         }

@@ -9,9 +9,6 @@
 
 use JCFirebase\JCFirebase;
 use JCFirebase\JCFirebaseOption;
-use PHPUnit\Framework\TestCase;
-use Firebase\JWT\JWT;
-use JCFirebase\OAuth;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
@@ -47,70 +44,76 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public $firebase;
 
-    private function data(){
-        return array(
-            'number' => 1,
-            'string' => 'hello'
-        );
+    public function testGetPathURI()
+    {
+        $firebase = self::getFirebase();
+
+        self::assertEquals(self::FIREBASE_URI . '.json', $firebase->getPathURI());
+        self::assertEquals(self::FIREBASE_URI . '.json', $firebase->getPathURI('/'));
+
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('path'));
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('/path/'));
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('//path//'));
+
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('path/to/your'));
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('/path/to/your/'));
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('//path/to/your//'));
+
     }
-    
-    private function getFirebase(){
-    	if($this->firebase){
-    	    return $this->firebase;
-        }else{
-    	    $this->firebase = new JCFirebase(self::FIREBASE_URI,array(
+
+    private function getFirebase()
+    {
+        if ($this->firebase) {
+            return $this->firebase;
+        } else {
+            $this->firebase = new JCFirebase(self::FIREBASE_URI, array(
                 'key' => self::SERVICE_ACCOUNT_KEY,
                 'iss' => self::SERVICE_ACCOUNT_EMAIL
             ));
         }
         return $this->firebase;
-	}
+    }
 
-	public function testGetPathURI(){
-    	$firebase = self::getFirebase();
-
-    	self::assertEquals(self::FIREBASE_URI.'.json',$firebase->getPathURI());
-		self::assertEquals(self::FIREBASE_URI.'.json',$firebase->getPathURI('/'));
-
-		self::assertEquals(self::FIREBASE_URI.'path.json',$firebase->getPathURI('path'));
-		self::assertEquals(self::FIREBASE_URI.'path.json',$firebase->getPathURI('/path/'));
-		self::assertEquals(self::FIREBASE_URI.'path.json',$firebase->getPathURI('//path//'));
-
-		self::assertEquals(self::FIREBASE_URI.'path/to/your.json',$firebase->getPathURI('path/to/your'));
-		self::assertEquals(self::FIREBASE_URI.'path/to/your.json',$firebase->getPathURI('/path/to/your/'));
-		self::assertEquals(self::FIREBASE_URI.'path/to/your.json',$firebase->getPathURI('//path/to/your//'));
-
-	}
-
-    public function testGet(){
+    public function testGet()
+    {
         $firebase = self::getFirebase();
 
         $response = $firebase->get();
-        self::assertEquals(200,$response->status_code);
+        self::assertEquals(200, $response->status_code);
     }
 
-    public function testPut(){
+    public function testPut()
+    {
         $firebase = self::getFirebase();
         $subPath = 'put_test';
 
-        $response = $firebase->put($subPath,array(
+        $response = $firebase->put($subPath, array(
             'data' => self::data()
         ));
 
-        self::assertEquals(200,$response->status_code);
-        self::assertEquals(1,json_decode($response->body)->number);
-        self::assertEquals('hello',json_decode($response->body)->string);
+        self::assertEquals(200, $response->status_code);
+        self::assertEquals(1, json_decode($response->body)->number);
+        self::assertEquals('hello', json_decode($response->body)->string);
     }
 
-    public function testPost(){
+    private function data()
+    {
+        return array(
+            'number' => 1,
+            'string' => 'hello'
+        );
+    }
+
+    public function testPost()
+    {
         $firebase = self::getFirebase();
         $subPath = 'post_test';
 
-        $response = $firebase->post($subPath,array(
+        $response = $firebase->post($subPath, array(
             'data' => self::data()
         ));
 
-        self::assertEquals(200,$response->status_code);
+        self::assertEquals(200, $response->status_code);
         self::assertNotNull(json_decode($response->body)->name);
     }
 
@@ -135,11 +138,12 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         self::assertEquals('hello2', json_decode($response->body)->string);
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $firebase = self::getFirebase();
         $subPath = 'delete_test';
 
-        $firebase->put($subPath,array(
+        $firebase->put($subPath, array(
             'data' => self::data()
         ));
 
@@ -147,30 +151,32 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
         $response = $firebase->delete($subPath);
 
-        self::assertEquals(200,$response->status_code);
+        self::assertEquals(200, $response->status_code);
     }
 
-    public function testGetShallow(){
+    public function testGetShallow()
+    {
         $firebase = self::getFirebase();
         $subPath = 'get_shallow_test';
 
-        $firebase->put($subPath,array('data' => self::data()));
+        $firebase->put($subPath, array('data' => self::data()));
 
         $response = $firebase->getShallow($subPath);
-        self::assertEquals(200,$response->status_code);
+        self::assertEquals(200, $response->status_code);
         self::assertTrue(json_decode($response->body)->number);
         self::assertTrue(json_decode($response->body)->string);
     }
 
-    public function testGetPrint(){
+    public function testGetPrint()
+    {
         $firebase = self::getFirebase();
 
-        self::assertContains(" ",$firebase->get(null,array(
-            JCFirebaseOption::OPTION_PRINT=>JCFirebaseOption::PRINT_PRETTY
+        self::assertContains(" ", $firebase->get(null, array(
+            JCFirebaseOption::OPTION_PRINT => JCFirebaseOption::PRINT_PRETTY
         ))->body);
 
-        self::assertEquals(204,$firebase->get(null,array(
-            JCFirebaseOption::OPTION_PRINT=>JCFirebaseOption::PRINT_SILENT
+        self::assertEquals(204, $firebase->get(null, array(
+            JCFirebaseOption::OPTION_PRINT => JCFirebaseOption::PRINT_SILENT
         ))->status_code);
     }
 }
