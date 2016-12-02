@@ -28,7 +28,7 @@ class OAuth
     {
         $this->key = $key;
         $this->iss = $iss;
-        $this->tokenLifeTime = 3600;
+        $this->tokenLifeTime = $tokenLifeTime;
     }
 
     public function getAccessToken(){
@@ -57,7 +57,7 @@ class OAuth
 
                 //set expire time
                 $eTime = time();
-                $this->exp = $sTime - $eTime + $this->tokenLifeTime;
+                $this->exp = $this->tokenLifeTime - ($sTime - $eTime);
             }
         }
         else{
