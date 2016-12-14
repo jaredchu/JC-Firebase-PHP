@@ -44,21 +44,6 @@ class JCFirebase
         }
     }
 
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function get($path = '', $options = array())
-    {
-        $this->refreshToken();
-
-        return Requests::get(
-            $this->mergeRequestPathURI($path, $options), $this->requestHeader,
-            $this->mergeRequestOptions($options)
-        );
-    }
-
     protected function refreshToken()
     {
         $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
@@ -108,6 +93,8 @@ class JCFirebase
             $pathURI = $pathURI . '?' . http_build_query($queryData);
         }
 
+        $this->refreshToken();
+
         return $pathURI;
     }
 
@@ -128,8 +115,6 @@ class JCFirebase
 
     public function getShallow($path = '', $options = array())
     {
-        $this->refreshToken();
-
         return Requests::get($this->getPathURI(
                 $path) . '?' . http_build_query(array(JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE)),
             $this->requestHeader,
@@ -142,10 +127,21 @@ class JCFirebase
      * @param array $options
      * @return \Requests_Response
      */
+    public function get($path = '', $options = array())
+    {
+        return Requests::get(
+            $this->mergeRequestPathURI($path, $options), $this->requestHeader,
+            $this->mergeRequestOptions($options)
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
     public function put($path = '', $options = array())
     {
-        $this->refreshToken();
-
         return Requests::put($this->getPathURI($path), $this->requestHeader,
             $this->mergeRequestOptions($options, true));
     }
@@ -157,8 +153,6 @@ class JCFirebase
      */
     public function post($path = '', $options = array())
     {
-        $this->refreshToken();
-
         return Requests::post($this->getPathURI($path), $this->requestHeader,
             $this->mergeRequestOptions($options, true));
     }
@@ -170,8 +164,6 @@ class JCFirebase
      */
     public function patch($path = '', $options = array())
     {
-        $this->refreshToken();
-
         return Requests::patch($this->getPathURI($path), $this->requestHeader,
             $this->mergeRequestOptions($options, true));
     }
@@ -183,8 +175,6 @@ class JCFirebase
      */
     public function delete($path = '', $options = array())
     {
-        $this->refreshToken();
-
         return Requests::delete($this->getPathURI($path), $this->requestHeader, $this->mergeRequestOptions($options));
     }
 }
