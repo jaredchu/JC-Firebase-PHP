@@ -44,22 +44,6 @@ class JCFirebase
         }
     }
 
-    protected function refreshToken()
-    {
-        $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
-    }
-
-    protected function mergeRequestPathURI($path = '', $options = array(), $reqType = JCFirebaseOption::REQ_TYPE_GET)
-    {
-        $print = '';
-        if (isset($options['print'])) {
-            if (JCFirebaseOption::isAllowPrint($reqType, $options['print'])) {
-                $print = $options['print'];
-            }
-        }
-        return $this->getPathURI($path, $print);
-    }
-
     public function getPathURI($path = '', $print = '')
     {
         //remove last slash from firebaseURI
@@ -98,7 +82,91 @@ class JCFirebase
         return $pathURI;
     }
 
-    protected function mergeRequestOptions($options = array(), $jsonEncode = false)
+    public function getShallow($path = '', $options = array())
+    {
+        return Requests::get(
+            $this->getPathURI($path) . '?' . http_build_query(array(
+                JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE
+            )),
+            $this->requestHeader,
+            $this->addDataToRequest($options)
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
+    public function get($path = '', $options = array())
+    {
+        return Requests::get(
+            $this->addDataToPathURI($path, $options), $this->requestHeader,
+            $this->addDataToRequest($options)
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
+    public function put($path = '', $options = array())
+    {
+        return Requests::put($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
+    public function post($path = '', $options = array())
+    {
+        return Requests::post($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
+    public function patch($path = '', $options = array())
+    {
+        return Requests::patch($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
+
+    /**
+     * @param string $path
+     * @param array $options
+     * @return \Requests_Response
+     */
+    public function delete($path = '', $options = array())
+    {
+        return Requests::delete($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options));
+    }
+
+    protected function refreshToken()
+    {
+        $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
+    }
+
+    protected function addDataToPathURI($path = '', $options = array(), $reqType = JCFirebaseOption::REQ_TYPE_GET)
+    {
+        $print = '';
+        if (isset($options['print'])) {
+            if (JCFirebaseOption::isAllowPrint($reqType, $options['print'])) {
+                $print = $options['print'];
+            }
+        }
+        return $this->getPathURI($path, $print);
+    }
+
+    protected function addDataToRequest($options = array(), $jsonEncode = false)
     {
         $requestOptions = array();
 
@@ -111,70 +179,5 @@ class JCFirebase
         }
 
         return $requestOptions;
-    }
-
-    public function getShallow($path = '', $options = array())
-    {
-        return Requests::get($this->getPathURI(
-                $path) . '?' . http_build_query(array(JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE)),
-            $this->requestHeader,
-            $this->mergeRequestOptions($options)
-        );
-    }
-
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function get($path = '', $options = array())
-    {
-        return Requests::get(
-            $this->mergeRequestPathURI($path, $options), $this->requestHeader,
-            $this->mergeRequestOptions($options)
-        );
-    }
-
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function put($path = '', $options = array())
-    {
-        return Requests::put($this->getPathURI($path), $this->requestHeader,
-            $this->mergeRequestOptions($options, true));
-    }
-
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function post($path = '', $options = array())
-    {
-        return Requests::post($this->getPathURI($path), $this->requestHeader,
-            $this->mergeRequestOptions($options, true));
-    }
-
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function patch($path = '', $options = array())
-    {
-        return Requests::patch($this->getPathURI($path), $this->requestHeader,
-            $this->mergeRequestOptions($options, true));
-    }
-
-    /**
-     * @param string $path
-     * @param array $options
-     * @return \Requests_Response
-     */
-    public function delete($path = '', $options = array())
-    {
-        return Requests::delete($this->getPathURI($path), $this->requestHeader, $this->mergeRequestOptions($options));
     }
 }

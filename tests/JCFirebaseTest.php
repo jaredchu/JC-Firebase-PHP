@@ -18,6 +18,19 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public $firebase;
 
+    private function getFirebase()
+    {
+        if ($this->firebase) {
+            return $this->firebase;
+        } else {
+            $this->firebase = new JCFirebase(self::FIREBASE_URI, array(
+                'key' => self::SERVICE_ACCOUNT_KEY,
+                'iss' => self::SERVICE_ACCOUNT_EMAIL
+            ));
+        }
+        return $this->firebase;
+    }
+
     public function testGetPathURI()
     {
         $firebase = self::getFirebase();
@@ -33,19 +46,6 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('/path/to/your/'));
         self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('//path/to/your//'));
 
-    }
-
-    private function getFirebase()
-    {
-        if ($this->firebase) {
-            return $this->firebase;
-        } else {
-            $this->firebase = new JCFirebase(self::FIREBASE_URI, array(
-                'key' => self::SERVICE_ACCOUNT_KEY,
-                'iss' => self::SERVICE_ACCOUNT_EMAIL
-            ));
-        }
-        return $this->firebase;
     }
 
     public function testGet()
