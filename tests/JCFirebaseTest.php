@@ -20,9 +20,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     private function getFirebase()
     {
-        if ($this->firebase) {
-            return $this->firebase;
-        } else {
+        if ($this->firebase == null ){
             $this->firebase = new JCFirebase(self::FIREBASE_URI, array(
                 'key' => self::SERVICE_ACCOUNT_KEY,
                 'iss' => self::SERVICE_ACCOUNT_EMAIL
