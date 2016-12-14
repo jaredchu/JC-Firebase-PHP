@@ -18,7 +18,7 @@ use JCFirebase\JCFirebase;
 $firebase = new JCFirebase('https://your-firebase-url',
 array('key'=>'your-private-key','iss'=>'your-service-email'));
 
-$response = $firebase->put($subPath, array('data' => array("first_name"=>"Jared","last_name"=>"Chu")));
+$response = $firebase->put('user', array('data' => array("first_name"=>"Jared","last_name"=>"Chu")));
 echo $response->status_code;
 echo $response->body;
 
