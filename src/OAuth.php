@@ -62,10 +62,13 @@ class OAuth
 
     public function getAccessToken()
     {
-        $startTime = time();
-        $this->requestAccessToken();
-        $endTime = time();
-        $this->expireTimestamp -= ($endTime - $startTime);
+        $currentTime = time();
+        if($this->expireTimestamp < $currentTime){
+            $startTime = time();
+            $this->requestAccessToken();
+            $endTime = time();
+            $this->expireTimestamp -= ($endTime - $startTime);
+        }
         return $this->accessToken;
     }
 }
