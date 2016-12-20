@@ -1,5 +1,5 @@
-# JC-Firebase-PHP
-PHP library access Firebase RESTful API
+<p align="center"><img width="500" src="http://i.imgur.com/X4bwTCg.png"></p>
+<p align="center">PHP library access Firebase RESTful API</p>
 
 [![Packagist](https://img.shields.io/packagist/v/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
 [![Travis](https://img.shields.io/travis/jaredchu/JC-Firebase-PHP.svg)](https://travis-ci.org/jaredchu/JC-Firebase-PHP)
