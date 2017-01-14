@@ -11,7 +11,7 @@
 `composer require jaredchu/jc-firebase-php`
 
 ## Usage
-Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get your `private-key` and `service-email`.
+Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get `json key file`.
 
 ```php
 use JCFirebase\JCFirebase;
