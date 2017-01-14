@@ -12,10 +12,8 @@ use JCFirebase\JCFirebaseOption;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
-    const SERVICE_ACCOUNT_KEY = "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDGBLBTjqaSx/2+\nbuyLuh7xbQGDBrcCRAB2a3LXv64IuxklwD2913KrxSYaeVThmbHa2AGSPkj7arBh\nIlRWC+fNS1OBNvkPuVoP8vCcK4vDx6OgeqyMlsgh53fJKoz3mNp4EEDNyH5iNEVw\nKbpBQUghcBZh1EIFvF4dwCqL7XMCMKkn3cJZ+CDp83z+tRkO+p3d+9rAIIizc0bU\nB2LQikwJrNdkPQ9GVEWfphwrjjlW50SHPm8JOhMN7vYJf0oAk8LV9H6LIK2nB28L\nMPYmBj/1PRMl0m9It2olDmBZ2ytB2Ooj48k0vVXVpOA4pr5hiD51OE8/Gul7BH9/\nvwjuPThPAgMBAAECggEBAMOvjIT2evyg8MxJmC+5Ha0eORlAAIkXpJFiO9qkDRuJ\nsh9RbHJ4QFUpfi85aj2MAmwvfNYGAV+cHnPPViK2nzuMzhfquJTmae9K+KaMjhFK\n8BO+R1ikBWEj+odtKmPgxT1TaocyNFteJqTiR7MHDX4l46iH9zrt3OBvsFwZqsck\ni7tqL6o8NxqiCJmfybENFoZ3mg309HtkZT76ipYTLbxlqGzubnTBiBEg9cCDVYdc\n8bKJHnLghKBoAkB6W/+op3LRy6PSnRkHyfWOUSwAsoQMa41u/1r5AZsFPB8tF38P\nAwDxDPvLMFFTPDluCOZrZirFARxygGmI8x0GQOA3KvECgYEA7mBRg/a7yQxxExMc\nCbIM721m0Us+Z+X2978kyXEPEFxWthnlKK+ythKBtGXNh0Wr8RVWFpbTCl64PT7/\nBEY1Pb/uHBnXBmuRT3J9bOZg4tcmkG7f1zHhQYiHAIolOpiBeLgGSRBMCaLNGuU2\nzM8N/mLvnmFuI7OQ9pJmXA4kpYkCgYEA1KiG5jZA/YWSbu8KCUzUasY84W7Iv+5j\nhs5WV2QlhLe9EHod7JeGQ4R9Uay6PZW44IJF0PhjmNRqH/GuqfhAPMbGdnf7kCA6\nNy5jEi67jm/g56sjeobVGNX9l7WmPLIvkkbdAbrhMxrAqjAKE3IKQjKEmWmWifVA\nG2R8HrmCURcCgYBko8umkEPl9NfEetvqh/6IE0NGd6MIUIG9RTjtx0rZ2HJPfY1P\naSZlUljqZdSpGNQn+58V+GVvSmA0k2UtU8rkoCSSPqKWtlFqHmcv0+/xtW41qmnc\nu9VjSpXct3ZST9LRubgFntjLdK1tfnpta7l3viN2VaIfdo9sWpDWqq30KQKBgAMw\nj+1uDOWAlmSxky32iA0d8hXTipFOaxG/kI35A5MNCnnvyvkcgLgMibCq7ZQ05bQA\nYDm1MBE/xmO6RUtpXNVMifeG7zAHO7hOKtBAATIuvWncKEkTMqkPtKEM6XRpm8sO\n4wu+mNgiY5dp5wzJnhvGFDUU31wsYIzIog/36lt7AoGBALoCn5jAx3UkS3zPJSy8\n8svC7xbmqHlTY/O6FcbDA5D7TYyF1dTxehvnEpf8SSeBMF8uA4bIq4XLoyFh8+Q+\nMJvJY6g8r3fGc2lzKztSFEceBVRW9as4QFPc+kQiY2656qU4EfQ7sh2wGuPceuNy\n3eI4K3++1UDcSdGguCV7qXfb\n-----END PRIVATE KEY-----\n";
-    const SERVICE_ACCOUNT_EMAIL = "firebase-adminsdk-0kp6l@fir-php-test-c7fa2.iam.gserviceaccount.com";
     const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
-
+    const KEY_FILE = '/resource/firebase-php-test-0a49b34e5f4a.json';
 
     /**
      * @var JCFirebase
@@ -23,10 +21,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
     protected static $firebase;
 
     public static function setUpBeforeClass(){
-        self::$firebase = new JCFirebase(self::FIREBASE_URI, array(
-            'key' => self::SERVICE_ACCOUNT_KEY,
-            'iss' => self::SERVICE_ACCOUNT_EMAIL
-        ));
+        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI,getcwd().self::KEY_FILE);
     }
 
     public function testGetPathURI()

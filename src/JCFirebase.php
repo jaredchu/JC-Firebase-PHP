@@ -37,6 +37,26 @@ class JCFirebase
         $this->setAuth($firebaseSerivceAccount);
     }
 
+	public static function fromKeyFile( $firebaseURI, $keyFile, $firebaseDefaultPath = '/' )
+	{
+		$keyData = null;
+		try {
+			$keyData = json_decode( file_get_contents( $keyFile ) );
+		} catch ( \Exception $exception ) {
+			$keyData = json_decode( Requests::get( $keyFile ) );
+		}
+
+		if ( $keyData ) {
+			$serviceAccount = $keyData->client_email;
+			$privateKey = $keyData->private_key;
+
+			return new self($firebaseURI,array('key' => $privateKey,'iss' => $serviceAccount),$firebaseDefaultPath);
+		}
+		else{
+			throw new \Exception("can't get data from key file");
+		}
+	}
+
     public function setAuth($firebaseServiceAccount)
     {
         if (isset($firebaseServiceAccount['key']) && isset($firebaseServiceAccount['iss'])) {
