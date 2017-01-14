@@ -1,4 +1,4 @@
-<p align="center"><img width="500" src="http://i.imgur.com/X4bwTCg.png"></p>
+<p align="center"><img src="http://i.imgur.com/CTP9Dmu.jpg"></p>
 <p align="center">PHP library access Firebase RESTful API</p>
 
 [![Packagist](https://img.shields.io/packagist/v/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
@@ -15,8 +15,7 @@ Create [service account](https://cloud.google.com/iam/docs/service-accounts) to 
 
 ```php
 use JCFirebase\JCFirebase;
-$firebase = new JCFirebase('https://your-firebase-url',
-array('key'=>'your-private-key','iss'=>'your-service-email'));
+$firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
 
 $response = $firebase->put('user', array('data' => array("first_name"=>"Jared","last_name"=>"Chu")));
 echo $response->status_code;
