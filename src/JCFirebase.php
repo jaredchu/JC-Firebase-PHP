@@ -29,12 +29,28 @@ class JCFirebase {
 	 */
 	protected $auth;
 
-	public function __construct( $firebaseURI, $firebaseSerivceAccount = '', $firebaseDefaultPath = '/' ) {
+
+	/**
+	 * JCFirebase constructor.
+	 *
+	 * @param $firebaseURI
+	 * @param array $firebaseAuth
+	 * @param string $firebaseDefaultPath
+	 */
+	public function __construct( $firebaseURI, $firebaseAuth = array(), $firebaseDefaultPath = '/' ) {
 		$this->firebaseURI         = $firebaseURI;
 		$this->firebaseDefaultPath = $firebaseDefaultPath;
-		$this->setAuth( $firebaseSerivceAccount );
+		$this->setAuth( $firebaseAuth );
 	}
 
+	/**
+	 * @param $firebaseURI
+	 * @param $keyFile
+	 * @param string $firebaseDefaultPath
+	 *
+	 * @return JCFirebase
+	 * @throws \Exception
+	 */
 	public static function fromKeyFile( $firebaseURI, $keyFile, $firebaseDefaultPath = '/' ) {
 		$keyData = null;
 		try {
