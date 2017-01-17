@@ -13,16 +13,39 @@
 ## Usage
 Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get `json key file`.
 
+### GET - Reading Data
 ```php
 use JCFirebase\JCFirebase;
 $firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
 
+$response = $firebase->get('user');
+echo $response->success;
+echo $response->body;
+```
+### PUT - Writing Data
+```php
 $response = $firebase->put('user', array('data' => array("first_name"=>"Jared","last_name"=>"Chu")));
 echo $response->status_code;
 echo $response->body;
+```
 
-$data = $firebase->get();
-vardump($data);
+### POST - Pushing Data
+```php
+$response = $firebase->post('log', array('data' => array("code"=>401,"message"=>"Not Authorized")));
+echo $response->status_code;
+echo $response->body;
+```
+### PATCH - Updating Data
+```php
+$response = $firebase->patch('user', array('data' => array("first_name"=>"Jared","last_name"=>"Leto","age"=>27)));
+echo $response->status_code;
+echo $response->body;
+```
+### DELETE - Removing Data
+```php
+$response = $firebase->delete('user/first_name');
+echo $response->status_code;
+echo $response->body;
 ```
 
 ## Contributing
