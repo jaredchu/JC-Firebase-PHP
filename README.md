@@ -25,20 +25,21 @@ echo $response->body;
 ```
 #### PUT - Writing Data
 ```php
-$response = $firebase->put('user', array('data' => array("first_name"=>"Jared","last_name"=>"Chu")));
+$response = $firebase->put('user', array('data' => array('first_name'=>'Jared','last_name'=>'Chu')));
 echo $response->status_code;
 echo $response->body;
 ```
 
 #### POST - Pushing Data
 ```php
-$response = $firebase->post('log', array('data' => array("code"=>401,"message"=>"Not Authorized")));
+$response = $firebase->post('log', array('data' => array('code'=>401,'message'=>'Not Authorized')));
 echo $response->status_code;
 echo $response->body;
 ```
 #### PATCH - Updating Data
 ```php
-$response = $firebase->patch('user', array('data' => array("first_name"=>"Jared","last_name"=>"Leto","age"=>27)));
+$response = $firebase->patch('user', array('data' => array('first_name'=>'Jared',
+                             'last_name'=>'Leto','age'=>27)));
 echo $response->status_code;
 echo $response->body;
 ```
