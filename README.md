@@ -9,7 +9,7 @@
 [![Packagist](https://img.shields.io/packagist/l/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
 
 ## Installation
-`composer require jaredchu/jc-firebase-php`
+`$ composer require jaredchu/jc-firebase-php`
 
 ## Usage
 Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get `json key file`.
@@ -52,9 +52,9 @@ echo $response->body;
 
 ## Contributing
 1. Fork it!
-2. Create your feature branch: `git checkout -b feature/your-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-new-feature`
+2. Create your feature branch: `$ git checkout -b feature/your-new-feature`
+3. Commit your changes: `$ git commit -am 'Add some feature'`
+4. Push to the branch: `$ git push origin feature/your-new-feature`
 5. Submit a pull request.
 
 ## License
