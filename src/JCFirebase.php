@@ -15,199 +15,226 @@ use Requests;
  * @package JCFirebase
  * reference https://www.firebase.com/docs/rest/api/
  */
-class JCFirebase {
-	public $firebaseURI;
-	public $firebaseDefaultPath;
-	public $requestHeader = array(
-		'accept'      => 'application/json',
-		'contentType' => 'application/json; charset=utf-8',
-		'dataType'    => 'json'
-	);
-	public $requestOptions = array();
-	/**
-	 * @var OAuth
-	 */
-	protected $auth;
+class JCFirebase
+{
+    public $firebaseURI;
+    public $firebaseDefaultPath;
+    public $requestHeader = array(
+        'accept' => 'application/json',
+        'contentType' => 'application/json; charset=utf-8',
+        'dataType' => 'json'
+    );
+    public $requestOptions = array();
+    /**
+     * @var OAuth
+     */
+    protected $auth;
 
 
-	/**
-	 * JCFirebase constructor.
-	 *
-	 * @param $firebaseURI
-	 * @param array $firebaseAuth
-	 * @param string $firebaseDefaultPath
-	 */
-	public function __construct( $firebaseURI, $firebaseAuth = array(), $firebaseDefaultPath = '/' ) {
-		$this->firebaseURI         = $firebaseURI;
-		$this->firebaseDefaultPath = $firebaseDefaultPath;
-		$this->setAuth( $firebaseAuth );
-	}
+    /**
+     * JCFirebase constructor.
+     *
+     * @param $firebaseURI
+     * @param array $firebaseAuth
+     * @param string $firebaseDefaultPath
+     */
+    public function __construct($firebaseURI, $firebaseAuth = array(), $firebaseDefaultPath = '/')
+    {
+        $this->firebaseURI = $firebaseURI;
+        $this->firebaseDefaultPath = $firebaseDefaultPath;
+        $this->setAuth($firebaseAuth);
+    }
 
-	/**
-	 * @param $firebaseURI
-	 * @param $keyFile
-	 * @param string $firebaseDefaultPath
-	 *
-	 * @return JCFirebase
-	 * @throws \Exception
-	 */
-	public static function fromKeyFile( $firebaseURI, $keyFile, $firebaseDefaultPath = '/' ) {
-		$keyData = null;
-		try {
-			$keyData = json_decode( file_get_contents( $keyFile ) );
-		} catch ( \Exception $exception ) {
-			$keyData = json_decode( Requests::get( $keyFile ) );
-		}
 
-		if ( $keyData ) {
-			$serviceAccount = $keyData->client_email;
-			$privateKey     = $keyData->private_key;
+    /**
+     * @param $firebaseURI
+     * @param $jsonString
+     * @param string $firebaseDefaultPath
+     * @return JCFirebase
+     * @throws \Exception
+     */
+    public static function fromJson($firebaseURI, $jsonString, $firebaseDefaultPath = '/')
+    {
+        if ($jsonString) {
+            $serviceAccount = $jsonString->client_email;
+            $privateKey = $jsonString->private_key;
 
-			return new self( $firebaseURI, array(
-				'key' => $privateKey,
-				'iss' => $serviceAccount
-			), $firebaseDefaultPath );
-		} else {
-			throw new \Exception( "can't get data from key file" );
-		}
-	}
+            return new self($firebaseURI, array(
+                'key' => $privateKey,
+                'iss' => $serviceAccount
+            ), $firebaseDefaultPath);
+        } else {
+            throw new \Exception("can't get data from key file");
+        }
+    }
 
-	public function setAuth( $firebaseServiceAccount ) {
-		if ( isset( $firebaseServiceAccount['key'] ) && isset( $firebaseServiceAccount['iss'] ) ) {
-			$this->auth = new OAuth( $firebaseServiceAccount['key'], $firebaseServiceAccount['iss'] );
-		}
-	}
+    /**
+     * @param $firebaseURI
+     * @param $keyFile
+     * @param string $firebaseDefaultPath
+     *
+     * @return JCFirebase
+     * @throws \Exception
+     */
+    public static function fromKeyFile($firebaseURI, $keyFile, $firebaseDefaultPath = '/')
+    {
+        $jsonString = null;
+        try {
+            $jsonString = json_decode(file_get_contents($keyFile));
+        } catch (\Exception $exception) {
+            $jsonString = json_decode(Requests::get($keyFile));
+        }
 
-	public function getPathURI( $path = '', $print = '' ) {
-		//remove last slash from firebaseURI
-		$template          = '/';
-		$this->firebaseURI = rtrim( $this->firebaseURI, $template );
-		$path              = rtrim( $path, $template );
-		$path              = ltrim( $path, $template );
+        return self::fromJson($firebaseURI, $jsonString, $firebaseDefaultPath);
+    }
 
-		//check https
-		if ( strpos( $this->firebaseURI, 'http://' ) !== false ) {
-			throw new \Exception( "https is required." );
-		}
+    public function setAuth($firebaseServiceAccount)
+    {
+        if (isset($firebaseServiceAccount['key']) && isset($firebaseServiceAccount['iss'])) {
+            $this->auth = new OAuth($firebaseServiceAccount['key'], $firebaseServiceAccount['iss']);
+        }
+    }
 
-		//check firebaseURI
-		if ( empty( $this->firebaseURI ) ) {
-			throw new \Exception( "firebase URI is required" );
-		}
+    public function getPathURI($path = '', $print = '')
+    {
+        //remove last slash from firebaseURI
+        $template = '/';
+        $this->firebaseURI = rtrim($this->firebaseURI, $template);
+        $path = rtrim($path, $template);
+        $path = ltrim($path, $template);
 
-		if ( strpos( $this->firebaseDefaultPath, "/" ) !== 0 ) {
-			throw new \Exception( "firebase default path must contain /" );
-		}
+        //check https
+        if (strpos($this->firebaseURI, 'http://') !== false) {
+            throw new \Exception("https is required.");
+        }
 
-		$pathURI = $this->firebaseURI . $this->firebaseDefaultPath . $path . ".json";
+        //check firebaseURI
+        if (empty($this->firebaseURI)) {
+            throw new \Exception("firebase URI is required");
+        }
 
-		//set query data
-		$queryData = array();
-		if ( ! empty( $print ) ) {
-			$queryData[ JCFirebaseOption::OPTION_PRINT ] = $print;
-		}
-		if ( ! empty( $queryData ) ) {
-			$pathURI = $pathURI . '?' . http_build_query( $queryData );
-		}
+        if (strpos($this->firebaseDefaultPath, "/") !== 0) {
+            throw new \Exception("firebase default path must contain /");
+        }
 
-		$this->refreshToken();
+        $pathURI = $this->firebaseURI . $this->firebaseDefaultPath . $path . ".json";
 
-		return $pathURI;
-	}
+        //set query data
+        $queryData = array();
+        if (!empty($print)) {
+            $queryData[JCFirebaseOption::OPTION_PRINT] = $print;
+        }
+        if (!empty($queryData)) {
+            $pathURI = $pathURI . '?' . http_build_query($queryData);
+        }
 
-	public function getShallow( $path = '', $options = array() ) {
-		return Requests::get(
-			$this->getPathURI( $path ) . '?' . http_build_query( array(
-				JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE
-			) ),
-			$this->requestHeader,
-			$this->addDataToRequest( $options )
-		);
-	}
+        $this->refreshToken();
 
-	/**
-	 * @param string $path
-	 * @param array $options
-	 *
-	 * @return \Requests_Response
-	 */
-	public function get( $path = '', $options = array() ) {
-		return Requests::get(
-			$this->addDataToPathURI( $path, $options ), $this->requestHeader,
-			$this->addDataToRequest( $options )
-		);
-	}
+        return $pathURI;
+    }
 
-	/**
-	 * @param string $path
-	 * @param array $options
-	 *
-	 * @return \Requests_Response
-	 */
-	public function put( $path = '', $options = array() ) {
-		return Requests::put( $this->getPathURI( $path ), $this->requestHeader,
-			$this->addDataToRequest( $options, true ) );
-	}
+    public function getShallow($path = '', $options = array())
+    {
+        return Requests::get(
+            $this->getPathURI($path) . '?' . http_build_query(array(
+                JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE
+            )),
+            $this->requestHeader,
+            $this->addDataToRequest($options)
+        );
+    }
 
-	/**
-	 * @param string $path
-	 * @param array $options
-	 *
-	 * @return \Requests_Response
-	 */
-	public function post( $path = '', $options = array() ) {
-		return Requests::post( $this->getPathURI( $path ), $this->requestHeader,
-			$this->addDataToRequest( $options, true ) );
-	}
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return \Requests_Response
+     */
+    public function get($path = '', $options = array())
+    {
+        return Requests::get(
+            $this->addDataToPathURI($path, $options), $this->requestHeader,
+            $this->addDataToRequest($options)
+        );
+    }
 
-	/**
-	 * @param string $path
-	 * @param array $options
-	 *
-	 * @return \Requests_Response
-	 */
-	public function patch( $path = '', $options = array() ) {
-		return Requests::patch( $this->getPathURI( $path ), $this->requestHeader,
-			$this->addDataToRequest( $options, true ) );
-	}
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return \Requests_Response
+     */
+    public function put($path = '', $options = array())
+    {
+        return Requests::put($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
 
-	/**
-	 * @param string $path
-	 * @param array $options
-	 *
-	 * @return \Requests_Response
-	 */
-	public function delete( $path = '', $options = array() ) {
-		return Requests::delete( $this->getPathURI( $path ), $this->requestHeader,
-			$this->addDataToRequest( $options ) );
-	}
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return \Requests_Response
+     */
+    public function post($path = '', $options = array())
+    {
+        return Requests::post($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
 
-	protected function refreshToken() {
-		$this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
-	}
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return \Requests_Response
+     */
+    public function patch($path = '', $options = array())
+    {
+        return Requests::patch($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options, true));
+    }
 
-	protected function addDataToPathURI( $path = '', $options = array(), $reqType = JCFirebaseOption::REQ_TYPE_GET ) {
-		$print = '';
-		if ( isset( $options['print'] ) ) {
-			if ( JCFirebaseOption::isAllowPrint( $reqType, $options['print'] ) ) {
-				$print = $options['print'];
-			}
-		}
+    /**
+     * @param string $path
+     * @param array $options
+     *
+     * @return \Requests_Response
+     */
+    public function delete($path = '', $options = array())
+    {
+        return Requests::delete($this->getPathURI($path), $this->requestHeader,
+            $this->addDataToRequest($options));
+    }
 
-		return $this->getPathURI( $path, $print );
-	}
+    protected function refreshToken()
+    {
+        $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
+    }
 
-	protected function addDataToRequest( $options = array(), $jsonEncode = false ) {
-		$requestOptions = array();
+    protected function addDataToPathURI($path = '', $options = array(), $reqType = JCFirebaseOption::REQ_TYPE_GET)
+    {
+        $print = '';
+        if (isset($options['print'])) {
+            if (JCFirebaseOption::isAllowPrint($reqType, $options['print'])) {
+                $print = $options['print'];
+            }
+        }
 
-		if ( isset( $options['data'] ) ) {
-			$requestOptions = array_merge( $options['data'], $requestOptions );
-		}
+        return $this->getPathURI($path, $print);
+    }
 
-		if ( $jsonEncode ) {
-			$requestOptions = json_encode( $requestOptions );
-		}
+    protected function addDataToRequest($options = array(), $jsonEncode = false)
+    {
+        $requestOptions = array();
 
-		return $requestOptions;
-	}
+        if (isset($options['data'])) {
+            $requestOptions = array_merge($options['data'], $requestOptions);
+        }
+
+        if ($jsonEncode) {
+            $requestOptions = json_encode($requestOptions);
+        }
+
+        return $requestOptions;
+    }
 }
