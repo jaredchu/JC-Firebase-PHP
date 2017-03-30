@@ -206,6 +206,19 @@ class JCFirebase
             $this->addDataToRequest($options));
     }
 
+    /**
+     * Function that check firebase authencation
+     * and configuration valid or not
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->get(null, array(
+                Option::OPTION_PRINT => Option::PRINT_SILENT
+            ))->status_code == 204;
+    }
+
     protected function refreshToken()
     {
         $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();

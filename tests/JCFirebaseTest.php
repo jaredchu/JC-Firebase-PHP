@@ -132,8 +132,6 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase {
 			Option::OPTION_PRINT => Option::PRINT_PRETTY
 		) )->body );
 
-		self::assertEquals( 204, $firebase->get( null, array(
-			Option::OPTION_PRINT => Option::PRINT_SILENT
-		) )->status_code );
+		self::assertTrue($firebase->isValid());
 	}
 }
