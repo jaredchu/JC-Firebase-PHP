@@ -9,7 +9,7 @@
 namespace JCFirebase;
 
 
-class JCFirebaseOption {
+class Option {
 	const __default = null;
 
 	const OPTION_SHALLOW = 'shallow';

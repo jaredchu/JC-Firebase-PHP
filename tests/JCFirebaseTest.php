@@ -8,7 +8,7 @@
  */
 
 use JCFirebase\JCFirebase;
-use JCFirebase\JCFirebaseOption;
+use JCFirebase\Option;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase {
 	const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
@@ -129,11 +129,11 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase {
 		$firebase = self::$firebase;
 
 		self::assertContains( " ", $firebase->get( null, array(
-			JCFirebaseOption::OPTION_PRINT => JCFirebaseOption::PRINT_PRETTY
+			Option::OPTION_PRINT => Option::PRINT_PRETTY
 		) )->body );
 
 		self::assertEquals( 204, $firebase->get( null, array(
-			JCFirebaseOption::OPTION_PRINT => JCFirebaseOption::PRINT_SILENT
+			Option::OPTION_PRINT => Option::PRINT_SILENT
 		) )->status_code );
 	}
 }

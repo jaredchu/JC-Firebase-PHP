@@ -122,7 +122,7 @@ class JCFirebase
         //set query data
         $queryData = array();
         if (!empty($print)) {
-            $queryData[JCFirebaseOption::OPTION_PRINT] = $print;
+            $queryData[Option::OPTION_PRINT] = $print;
         }
         if (!empty($queryData)) {
             $pathURI = $pathURI . '?' . http_build_query($queryData);
@@ -137,7 +137,7 @@ class JCFirebase
     {
         return Requests::get(
             $this->getPathURI($path) . '?' . http_build_query(array(
-                JCFirebaseOption::OPTION_SHALLOW => JCFirebaseOption::SHALLOW_TRUE
+                Option::OPTION_SHALLOW => Option::SHALLOW_TRUE
             )),
             $this->requestHeader,
             $this->addDataToRequest($options)
@@ -211,11 +211,11 @@ class JCFirebase
         $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
     }
 
-    protected function addDataToPathURI($path = '', $options = array(), $reqType = JCFirebaseOption::REQ_TYPE_GET)
+    protected function addDataToPathURI($path = '', $options = array(), $reqType = Option::REQ_TYPE_GET)
     {
         $print = '';
         if (isset($options['print'])) {
-            if (JCFirebaseOption::isAllowPrint($reqType, $options['print'])) {
+            if (Option::isAllowPrint($reqType, $options['print'])) {
                 $print = $options['print'];
             }
         }
