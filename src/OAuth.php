@@ -28,12 +28,13 @@ class OAuth
      *
      * @param $key
      * @param $iss
+     * @param $lifeTime
      */
-    public function __construct($key, $iss, $tokenLifeTime = 3600)
+    public function __construct($key, $iss, $lifeTime = 3600)
     {
         $this->key = $key;
         $this->iss = $iss;
-        $this->tokenLifeTime = $tokenLifeTime;
+        $this->tokenLifeTime = $lifeTime;
     }
 
     protected function requestAccessToken()

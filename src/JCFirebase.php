@@ -9,6 +9,8 @@
 namespace JCFirebase;
 
 use Requests;
+use JCFirebase\Enums\RequestType;
+use JCFirebase\Enums\PrintType;
 
 /**
  * Class JCFirebase
@@ -39,7 +41,7 @@ class JCFirebase
      * JCFirebase constructor.
      *
      * @param $firebaseURI
-     * @param array $firebaseAuth
+     * @param OAuth $auth
      * @param string $rootPath
      */
     public function __construct($firebaseURI, OAuth $auth, $rootPath = '/')
@@ -116,7 +118,7 @@ class JCFirebase
         //set query data
         $queryData = array();
         if (!empty($print)) {
-            $queryData[Option::OPTION_PRINT] = $print;
+            $queryData[Option::_PRINT] = $print;
         }
         if (!empty($queryData)) {
             $pathURI = $pathURI . '?' . http_build_query($queryData);
@@ -131,7 +133,7 @@ class JCFirebase
     {
         return Requests::get(
             $this->getPathURI($path) . '?' . http_build_query(array(
-                Option::OPTION_SHALLOW => Option::SHALLOW_TRUE
+                Option::_SHALLOW => 'true'
             )),
             $this->requestHeader,
             $this->addDataToRequest($options)
@@ -209,7 +211,7 @@ class JCFirebase
     public function isValid()
     {
         return $this->get(null, array(
-                Option::OPTION_PRINT => Option::PRINT_SILENT
+                Option::_PRINT => PrintType::SILENT
             ))->status_code == 204;
     }
 
@@ -218,7 +220,7 @@ class JCFirebase
         $this->requestHeader['Authorization'] = 'Bearer ' . $this->auth->getAccessToken();
     }
 
-    protected function addDataToPathURI($path = '', $options = array(), $reqType = Option::REQ_TYPE_GET)
+    protected function addDataToPathURI($path = '', $options = array(), $reqType = RequestType::GET)
     {
         $print = '';
         if (isset($options['print'])) {

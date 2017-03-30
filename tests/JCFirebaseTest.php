@@ -9,6 +9,7 @@
 
 use JCFirebase\JCFirebase;
 use JCFirebase\Option;
+use JCFirebase\Enums\PrintType;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
@@ -140,7 +141,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $firebase = self::$firebase;
 
         self::assertContains(" ", $firebase->get(null, array(
-            Option::OPTION_PRINT => Option::PRINT_PRETTY
+            Option::_PRINT => PrintType::PRETTY
         ))->body);
 
         self::assertTrue($firebase->isValid());
