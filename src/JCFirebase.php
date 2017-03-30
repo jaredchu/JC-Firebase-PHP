@@ -18,17 +18,21 @@ use Requests;
 class JCFirebase
 {
     public $firebaseURI;
-    public $firebaseDefaultPath;
+
+    public $rootPath;
+
     public $requestHeader = array(
         'accept' => 'application/json',
         'contentType' => 'application/json; charset=utf-8',
         'dataType' => 'json'
     );
+
     public $requestOptions = array();
+
     /**
      * @var OAuth
      */
-    protected $auth;
+    public $auth;
 
 
     /**
@@ -36,33 +40,30 @@ class JCFirebase
      *
      * @param $firebaseURI
      * @param array $firebaseAuth
-     * @param string $firebaseDefaultPath
+     * @param string $rootPath
      */
-    public function __construct($firebaseURI, $firebaseAuth = array(), $firebaseDefaultPath = '/')
+    public function __construct($firebaseURI, OAuth $auth, $rootPath = '/')
     {
         $this->firebaseURI = $firebaseURI;
-        $this->firebaseDefaultPath = $firebaseDefaultPath;
-        $this->setAuth($firebaseAuth);
+        $this->firebaseDefaultPath = $rootPath;
+        $this->auth = $auth;
     }
 
 
     /**
      * @param $firebaseURI
      * @param $jsonString
-     * @param string $firebaseDefaultPath
+     * @param string $rootPath
      * @return JCFirebase
      * @throws \Exception
      */
-    public static function fromJson($firebaseURI, $jsonString, $firebaseDefaultPath = '/')
+    public static function fromJson($firebaseURI, $jsonString, $rootPath = '/')
     {
         if ($jsonString) {
             $serviceAccount = $jsonString->client_email;
             $privateKey = $jsonString->private_key;
 
-            return new self($firebaseURI, array(
-                'key' => $privateKey,
-                'iss' => $serviceAccount
-            ), $firebaseDefaultPath);
+            return new self($firebaseURI, new OAuth($privateKey, $serviceAccount), $rootPath);
         } else {
             throw new \Exception("can't get data from key file");
         }
@@ -71,12 +72,12 @@ class JCFirebase
     /**
      * @param $firebaseURI
      * @param $keyFile
-     * @param string $firebaseDefaultPath
+     * @param string $rootPath
      *
      * @return JCFirebase
      * @throws \Exception
      */
-    public static function fromKeyFile($firebaseURI, $keyFile, $firebaseDefaultPath = '/')
+    public static function fromKeyFile($firebaseURI, $keyFile, $rootPath = '/')
     {
         $jsonString = null;
         try {
@@ -85,14 +86,7 @@ class JCFirebase
             $jsonString = json_decode(Requests::get($keyFile));
         }
 
-        return self::fromJson($firebaseURI, $jsonString, $firebaseDefaultPath);
-    }
-
-    public function setAuth($firebaseServiceAccount)
-    {
-        if (isset($firebaseServiceAccount['key']) && isset($firebaseServiceAccount['iss'])) {
-            $this->auth = new OAuth($firebaseServiceAccount['key'], $firebaseServiceAccount['iss']);
-        }
+        return self::fromJson($firebaseURI, $jsonString, $rootPath);
     }
 
     public function getPathURI($path = '', $print = '')
