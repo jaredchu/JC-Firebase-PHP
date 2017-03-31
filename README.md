@@ -103,7 +103,7 @@ $log->save();
 ```php
 $log = Log::findByKey( $key, $firebase );
 $log->delete();
-
+```
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `$ git checkout -b feature/your-new-feature`
