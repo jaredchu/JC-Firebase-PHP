@@ -47,7 +47,7 @@ class JCFirebase
     public function __construct($firebaseURI, OAuth $auth, $rootPath = '/')
     {
         $this->firebaseURI = $firebaseURI;
-        $this->firebaseDefaultPath = $rootPath;
+        $this->rootPath = $rootPath;
         $this->auth = $auth;
     }
 
@@ -109,11 +109,11 @@ class JCFirebase
             throw new \Exception("firebase URI is required");
         }
 
-        if (strpos($this->firebaseDefaultPath, "/") !== 0) {
+        if (strpos($this->rootPath, "/") !== 0) {
             throw new \Exception("firebase default path must contain /");
         }
 
-        $pathURI = $this->firebaseURI . $this->firebaseDefaultPath . $path . ".json";
+        $pathURI = $this->firebaseURI . $this->rootPath . $path . ".json";
 
         //set query data
         $queryData = array();
