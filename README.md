@@ -11,7 +11,7 @@
 ## Installation
 `$ composer require jaredchu/jc-firebase-php`
 
-## Usage
+## Simple usage
 Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get `json key file`.
 
 #### GET - Reading Data
@@ -49,6 +49,60 @@ $response = $firebase->delete('user/first_name');
 echo $response->status_code;
 echo $response->body;
 ```
+## Modeling
+
+#### Create Firebase connector
+```php
+use JCFirebase\JCFirebase;
+$firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
+```
+#### Extend your Model with FirebaseModel
+```php
+class Log extends FirebaseModel {
+	/**
+	 * @var integer
+	 */
+	public $code;
+	/**
+	 * @var string
+	 */
+	public $message;
+}
+```
+#### Get record
+```php
+$log = Log::findByKey( $key, $firebase );
+echo $log->key;
+echo $log->code;
+echo $log->message;
+
+$logs = Log::findAll( $firebase );
+foreach ($logs as $log){
+    echo $log->key;
+    echo $log->code;
+    echo $log->message;
+}
+```
+
+#### Create record
+```php
+$log          = new Log( $firebase );
+$log->code    = 200;
+$log->message = 'Success';
+$log->save();
+```
+
+#### Update record
+```php
+$log = Log::findByKey( $key, $firebase );
+$log->code    = 400;
+$log->message = 'Bad Request';
+$log->save();
+```
+#### Delete record
+```php
+$log = Log::findByKey( $key, $firebase );
+$log->delete();
 
 ## Contributing
 1. Fork it!
