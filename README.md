@@ -12,7 +12,8 @@
 `$ composer require jaredchu/jc-firebase-php`
 
 ## Simple usage
-Create [service account](https://cloud.google.com/iam/docs/service-accounts) to get `json key file`.
+Generate a [private key in JSON or PKCS12 format](https://cloud.google.com/storage/docs/authentication#service_accounts).
+<img src="http://i.imgur.com/d4pBQqB.png">
 
 #### GET - Reading Data
 ```php
