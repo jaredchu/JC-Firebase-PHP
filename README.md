@@ -12,14 +12,18 @@
 `$ composer require jaredchu/jc-firebase-php`
 
 ## Simple usage
-Generate a [private key in JSON or PKCS12 format](https://cloud.google.com/storage/docs/authentication#service_accounts).
+Generate a [private key in JSON format](https://cloud.google.com/storage/docs/authentication#service_accounts).
 <img src="http://i.imgur.com/d4pBQqB.png">
 
-#### GET - Reading Data
+#### Check Firebase credential
 ```php
 use JCFirebase\JCFirebase;
 $firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
+$firebase->isValid()
+```
 
+#### GET - Reading Data
+```php
 $response = $firebase->get('user');
 echo $response->success;
 echo $response->body;
