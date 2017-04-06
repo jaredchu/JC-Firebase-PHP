@@ -19,7 +19,9 @@ Generate a [private key in JSON format](https://cloud.google.com/storage/docs/au
 ```php
 use JCFirebase\JCFirebase;
 $firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
-$firebase->isValid()
+if( $firebase->isValid() ){
+    //do something
+}
 ```
 
 #### GET - Reading Data
