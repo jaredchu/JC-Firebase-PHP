@@ -18,6 +18,10 @@ Generate a [private key in JSON format](https://cloud.google.com/storage/docs/au
 #### Check Firebase credential
 ```php
 use JCFirebase\JCFirebase;
+
+$firebaseURI = "https://<DATABASE_NAME>.firebaseio.com";
+$jsonKeyFile = "path/to/serviceAccountKey.json";
+
 $firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
 if( $firebase->isValid() ){
     //do something
@@ -61,6 +65,10 @@ echo $response->body;
 #### Create Firebase connector
 ```php
 use JCFirebase\JCFirebase;
+
+$firebaseURI = "https://<DATABASE_NAME>.firebaseio.com";
+$jsonKeyFile = "path/to/serviceAccountKey.json";
+
 $firebase = new JCFirebase::fromKeyFile( $firebaseURI, $jsonKeyFile );
 ```
 #### Extend your Model with FirebaseModel
