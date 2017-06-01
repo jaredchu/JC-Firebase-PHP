@@ -127,4 +127,4 @@ $log->delete();
 5. Submit a pull request.
 
 ## License
-[MIT License](https://github.com/jaredchu/JC-Firebase-PHP/blob/master/README.md)
+[MIT License](https://github.com/jaredchu/JC-Firebase-PHP/blob/master/LICENSE)
