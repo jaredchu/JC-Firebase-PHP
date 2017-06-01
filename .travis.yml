@@ -5,6 +5,8 @@ php:
   - '7.1'
   - hhvm
   - nightly
+  
+dist: trusty
 
 before_script:
   - composer self-update
