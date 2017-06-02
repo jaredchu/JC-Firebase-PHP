@@ -21,9 +21,8 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
      */
     protected static $firebase;
 
-    public static function setUpBeforeClass()
-    {
-        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, getcwd() . self::KEY_FILE);
+    public static function setUpBeforeClass() {
+        self::$firebase = JCFirebase::fromKeyFile( self::FIREBASE_URI, getcwd() . self::KEY_FILE );
     }
 
     public function testGetPathURI()
@@ -48,7 +47,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $firebase = self::$firebase;
 
         $response = $firebase->get();
-        self::assertEquals(200, $response->status_code);
+        self::assertEquals(200, $response->status());
     }
 
     public function testPut()
@@ -60,9 +59,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
             'data' => self::data()
         ));
 
-        self::assertEquals(200, $response->status_code);
-        self::assertEquals(1, json_decode($response->body)->number);
-        self::assertEquals('hello', json_decode($response->body)->string);
+        self::assertEquals(200, $response->status());
+        self::assertEquals(1, $response->json()->number);
+        self::assertEquals('hello', $response->json()->string);
     }
 
     private function data()
@@ -82,8 +81,8 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
             'data' => self::data()
         ));
 
-        self::assertEquals(200, $response->status_code);
-        self::assertNotNull(json_decode($response->body)->name);
+        self::assertEquals(200, $response->status());
+        self::assertNotNull($response->json()->name);
     }
 
     public function testPatch()
@@ -102,9 +101,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
             )
         ));
 
-        self::assertEquals(200, $response->status_code);
-        self::assertEquals(2, json_decode($response->body)->number);
-        self::assertEquals('hello2', json_decode($response->body)->string);
+        self::assertEquals(200, $response->status());
+        self::assertEquals(2, $response->json()->number);
+        self::assertEquals('hello2', $response->json()->string);
     }
 
     public function testDelete()
@@ -120,7 +119,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
         $response = $firebase->delete($subPath);
 
-        self::assertEquals(200, $response->status_code);
+        self::assertEquals(200, $response->status());
     }
 
     public function testGetShallow()
@@ -131,9 +130,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $firebase->put($subPath, array('data' => self::data()));
 
         $response = $firebase->getShallow($subPath);
-        self::assertEquals(200, $response->status_code);
-        self::assertTrue(json_decode($response->body)->number);
-        self::assertTrue(json_decode($response->body)->string);
+        self::assertEquals(200, $response->status());
+        self::assertTrue($response->json()->number);
+        self::assertTrue($response->json()->string);
     }
 
     public function testGetPrint()
@@ -142,7 +141,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
         self::assertContains(" ", $firebase->get(null, array(
             Option::_PRINT => PrintType::PRETTY
-        ))->body);
+        ))->body());
 
         self::assertTrue($firebase->isValid());
     }

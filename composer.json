@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "rmccue/requests": "^1.7",
         "firebase/php-jwt": "^4.0",
-        "netresearch/jsonmapper": "^1.1"
+        "netresearch/jsonmapper": "^1.1",
+        "jaredchu/jc-request": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "5.6.*"

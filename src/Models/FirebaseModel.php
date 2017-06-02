@@ -69,9 +69,9 @@ class FirebaseModel
             'data' => $this->getData()
         ));
 
-        $this->key = json_decode($response->body)->name;
+        $this->key = json_decode($response->body())->name;
 
-        return $response->success;
+        return $response->success();
     }
 
 
@@ -85,7 +85,7 @@ class FirebaseModel
                 'data' => $this->getData()
             ));
 
-            $success = $response->success;
+            $success = $response->success();
         } else {
             $success = $this->create();
         }
@@ -102,7 +102,7 @@ class FirebaseModel
         if (!empty($this->key)) {
             $response = $this->firebase->delete(self::getNodeName() . '/' . $this->key);
 
-            $success = $response->success;
+            $success = $response->success();
         }
 
         return $success;
@@ -118,9 +118,9 @@ class FirebaseModel
     {
         $response = $firebase->get(self::getNodeName() . '/' . $key);
         $object = null;
-        if ($response->success && $response->body != 'null') {
+        if ($response->success() && $response->body() != 'null') {
             $mapper = new JsonMapper();
-            $object = $mapper->map(json_decode($response->body), new static());
+            $object = $mapper->map($response->json(), new static());
             $object->key = $key;
             $object->firebase = $firebase;
         }
@@ -138,8 +138,8 @@ class FirebaseModel
         $response = $firebase->get(self::getNodeName());
         $objects = array();
 
-        $jsonObject = json_decode($response->body, true);
-        if ($response->success && count($jsonObject)) {
+        $jsonObject = json_decode($response->body(), true);
+        if ($response->success() && count($jsonObject)) {
             do {
                 $mapper = new JsonMapper();
                 $object = $mapper->map((object)current($jsonObject), new static());

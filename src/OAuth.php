@@ -9,7 +9,7 @@
 namespace JCFirebase;
 
 use Firebase\JWT\JWT;
-use Requests;
+use JC\JCRequest;
 
 class OAuth
 {
@@ -50,13 +50,13 @@ class OAuth
         );
         $jwt = JWT::encode($jsonToken, $this->key, 'RS256');
 
-        $OAuthResponse = Requests::post('https://www.googleapis.com/oauth2/v4/token', array(), array(
+        $OAuthResponse = JCRequest::post('https://www.googleapis.com/oauth2/v4/token', array(
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             'assertion' => $jwt
         ));
 
-        if ($OAuthResponse->status_code == 200) {
-            $this->accessToken = json_decode($OAuthResponse->body)->access_token;
+        if ($OAuthResponse->status() == 200) {
+            $this->accessToken = json_decode($OAuthResponse->body())->access_token;
 
             return true;
         }

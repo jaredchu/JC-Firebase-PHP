@@ -8,7 +8,8 @@
 
 namespace JCFirebase;
 
-use Requests;
+use JC\JCRequest;
+use JC\JCResponse;
 use JCFirebase\Enums\RequestType;
 use JCFirebase\Enums\PrintType;
 
@@ -85,7 +86,7 @@ class JCFirebase
         try {
             $jsonString = json_decode(file_get_contents($keyFile));
         } catch (\Exception $exception) {
-            $jsonString = json_decode(Requests::get($keyFile));
+            $jsonString = json_decode(JCRequest::get($keyFile));
         }
 
         return self::fromJson($firebaseURI, $jsonString, $rootPath);
@@ -131,12 +132,12 @@ class JCFirebase
 
     public function getShallow($path = '', $options = array())
     {
-        return Requests::get(
+        return JCRequest::get(
             $this->getPathURI($path) . '?' . http_build_query(array(
                 Option::_SHALLOW => 'true'
             )),
-            $this->requestHeader,
-            $this->addDataToRequest($options)
+            $this->addDataToRequest($options),
+            $this->requestHeader
         );
     }
 
@@ -144,13 +145,14 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return JCResponse
      */
     public function get($path = '', $options = array())
     {
-        return Requests::get(
-            $this->addDataToPathURI($path, $options), $this->requestHeader,
-            $this->addDataToRequest($options)
+        return JCRequest::get(
+            $this->addDataToPathURI($path, $options),
+            $this->addDataToRequest($options),
+            $this->requestHeader
         );
     }
 
@@ -158,48 +160,59 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return JCResponse
      */
     public function put($path = '', $options = array())
     {
-        return Requests::put($this->getPathURI($path), $this->requestHeader,
-            $this->addDataToRequest($options, true));
+        return JCRequest::put($this->getPathURI($path),
+            $this->addDataToRequest($options, true),
+            $this->requestHeader
+        );
     }
 
     /**
      * @param string $path
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return JCResponse
      */
     public function post($path = '', $options = array())
     {
-        return Requests::post($this->getPathURI($path), $this->requestHeader,
-            $this->addDataToRequest($options, true));
+        return JCRequest::post(
+            $this->getPathURI($path),
+            $this->addDataToRequest($options, true),
+            $this->requestHeader
+        );
     }
 
     /**
      * @param string $path
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return JCResponse
      */
     public function patch($path = '', $options = array())
     {
-        return Requests::patch($this->getPathURI($path), $this->requestHeader,
-            $this->addDataToRequest($options, true));
+        return JCRequest::patch(
+            $this->getPathURI($path),
+            $this->addDataToRequest($options, true),
+            $this->requestHeader
+        );
     }
 
     /**
      * @param string $path
      * @param array $options
      *
-     * @return \Requests_Response
+     * @return JCResponse
      */
     public function delete($path = '', $options = array())
     {
-        return Requests::delete($this->getPathURI($path), $this->requestHeader,
-            $this->addDataToRequest($options));
+        return JCRequest::delete(
+            $this->getPathURI($path),
+            $this->addDataToRequest($options),
+            $this->requestHeader
+        );
     }
 
     /**
@@ -212,7 +225,7 @@ class JCFirebase
     {
         return $this->get(null, array(
                 Option::_PRINT => PrintType::SILENT
-            ))->status_code == 204;
+            ))->status() == 204;
     }
 
     protected function refreshToken()
