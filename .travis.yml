@@ -8,6 +8,12 @@ php:
   
 dist: trusty
 
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
+  fast_finish: true
+
 before_script:
   - composer self-update
 
