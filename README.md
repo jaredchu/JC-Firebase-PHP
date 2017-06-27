@@ -13,7 +13,7 @@
 
 ## Simple usage
 Generate a [private key in JSON format](https://cloud.google.com/storage/docs/authentication#service_accounts).
-<img src="http://i.imgur.com/d4pBQqB.png">
+<img src="http://i.imgur.com/MQ5WHBF.png">
 
 #### Check Firebase credential
 ```php
