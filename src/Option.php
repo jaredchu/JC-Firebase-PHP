@@ -18,14 +18,8 @@ class Option
 
     public static function isAllowPrint($reqType, $printType)
     {
-        if ($printType == PrintType::PRETTY) {
-            return true;
-        }
-
-        if ($printType == PrintType::SILENT) {
-            if ($reqType == RequestType::DELETE) {
-                return false;
-            }
+        if ($printType == PrintType::SILENT && $reqType == RequestType::DELETE) {
+            return false;
         }
 
         return true;

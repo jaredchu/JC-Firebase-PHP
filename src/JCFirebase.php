@@ -236,10 +236,8 @@ class JCFirebase
     protected function addDataToPathURI($path = '', $options = array(), $reqType = RequestType::GET)
     {
         $print = '';
-        if (isset($options['print'])) {
-            if (Option::isAllowPrint($reqType, $options['print'])) {
-                $print = $options['print'];
-            }
+        if (isset($options[Option::OPT_PRINT]) && Option::isAllowPrint($reqType, $options['print'])) {
+            $print = $options[Option::OPT_PRINT];
         }
 
         return $this->getPathURI($path, $print);
@@ -247,16 +245,16 @@ class JCFirebase
 
     protected function addDataToRequest($options = array(), $jsonEncode = false)
     {
-        $requestOptions = array();
+        $requestData = array();
 
         if (isset($options['data'])) {
-            $requestOptions = array_merge($options['data'], $requestOptions);
+            $requestData = array_merge($options['data'], $requestData);
         }
 
         if ($jsonEncode) {
-            $requestOptions = json_encode($requestOptions);
+            $requestData = json_encode($requestData);
         }
 
-        return $requestOptions;
+        return $requestData;
     }
 }
