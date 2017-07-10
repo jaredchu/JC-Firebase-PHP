@@ -13,8 +13,8 @@ use JCFirebase\Enums\PrintType;
 
 class Option
 {
-    const _SHALLOW = 'shallow';
-    const _PRINT = 'print';
+    const OPT_SHALLOW = 'shallow';
+    const OPT_PRINT = 'print';
 
     public static function isAllowPrint($reqType, $printType)
     {

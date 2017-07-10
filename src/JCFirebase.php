@@ -119,7 +119,7 @@ class JCFirebase
         //set query data
         $queryData = array();
         if (!empty($print)) {
-            $queryData[Option::_PRINT] = $print;
+            $queryData[Option::OPT_PRINT] = $print;
         }
         if (!empty($queryData)) {
             $pathURI = $pathURI . '?' . http_build_query($queryData);
@@ -134,7 +134,7 @@ class JCFirebase
     {
         return JCRequest::get(
             $this->getPathURI($path) . '?' . http_build_query(array(
-                Option::_SHALLOW => 'true'
+                Option::OPT_SHALLOW => 'true'
             )),
             $this->addDataToRequest($options),
             $this->requestHeader
@@ -224,7 +224,7 @@ class JCFirebase
     public function isValid()
     {
         return $this->get(null, array(
-                Option::_PRINT => PrintType::SILENT
+                Option::OPT_PRINT => PrintType::SILENT
             ))->status() == 204;
     }
 

@@ -140,7 +140,7 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
         $firebase = self::$firebase;
 
         self::assertContains(" ", $firebase->get(null, array(
-            Option::_PRINT => PrintType::PRETTY
+            Option::OPT_PRINT => PrintType::PRETTY
         ))->body());
 
         self::assertTrue($firebase->isValid());
