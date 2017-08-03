@@ -7,9 +7,9 @@
  * Time: 4:07 PM
  */
 
+use JCFirebase\Enums\PrintType;
 use JCFirebase\JCFirebase;
 use JCFirebase\Option;
-use JCFirebase\Enums\PrintType;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
@@ -21,8 +21,9 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
      */
     protected static $firebase;
 
-    public static function setUpBeforeClass() {
-        self::$firebase = JCFirebase::fromKeyFile( self::FIREBASE_URI, getcwd() . self::KEY_FILE );
+    public static function setUpBeforeClass()
+    {
+        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, getcwd() . self::KEY_FILE);
     }
 
     public function testGetPathURI()

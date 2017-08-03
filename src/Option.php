@@ -8,8 +8,8 @@
 
 namespace JCFirebase;
 
-use JCFirebase\Enums\RequestType;
 use JCFirebase\Enums\PrintType;
+use JCFirebase\Enums\RequestType;
 
 class Option
 {

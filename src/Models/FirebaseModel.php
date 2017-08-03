@@ -8,8 +8,8 @@
 
 namespace JCFirebase\Models;
 
-use JsonMapper;
 use JCFirebase\JCFirebase;
+use JsonMapper;
 
 /**
  * Class FirebaseModel

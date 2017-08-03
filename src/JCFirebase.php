@@ -10,8 +10,8 @@ namespace JCFirebase;
 
 use JC\JCRequest;
 use JC\JCResponse;
-use JCFirebase\Enums\RequestType;
 use JCFirebase\Enums\PrintType;
+use JCFirebase\Enums\RequestType;
 
 /**
  * Class JCFirebase
