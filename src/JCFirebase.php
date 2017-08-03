@@ -62,14 +62,7 @@ class JCFirebase
      */
     public static function fromJson($firebaseURI, $jsonString, $rootPath = '/')
     {
-        if ($jsonString) {
-            $serviceAccount = $jsonString->client_email;
-            $privateKey = $jsonString->private_key;
-
-            return new self($firebaseURI, new OAuth($privateKey, $serviceAccount), $rootPath);
-        } else {
-            throw new \Exception("can't get data from key file");
-        }
+        return new self($firebaseURI, OAuth::fromJson($jsonString), $rootPath);
     }
 
     /**
@@ -82,14 +75,7 @@ class JCFirebase
      */
     public static function fromKeyFile($firebaseURI, $keyFile, $rootPath = '/')
     {
-        $jsonString = null;
-        try {
-            $jsonString = json_decode(file_get_contents($keyFile));
-        } catch (\Exception $exception) {
-            $jsonString = json_decode(JCRequest::get($keyFile));
-        }
-
-        return self::fromJson($firebaseURI, $jsonString, $rootPath);
+        return new self($firebaseURI, OAuth::fromKeyFile($keyFile), $rootPath);
     }
 
     public function getPathURI($path = '', $print = '')

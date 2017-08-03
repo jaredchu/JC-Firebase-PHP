@@ -9,12 +9,13 @@
 
 use JCFirebase\Enums\PrintType;
 use JCFirebase\JCFirebase;
+use JCFirebase\OAuth;
 use JCFirebase\Option;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {
     const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
-    const KEY_FILE = '/resource/firebase-php-test-0a49b34e5f4a.json';
+    const KEY_FILE = __DIR__ . '/../resource/firebase-php-test-0a49b34e5f4a.json';
 
     /**
      * @var JCFirebase
@@ -23,40 +24,40 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, getcwd() . self::KEY_FILE);
+        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, self::KEY_FILE);
     }
 
     public function testGetPathURI()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
 
-        self::assertEquals(self::FIREBASE_URI . '.json', $firebase->getPathURI());
-        self::assertEquals(self::FIREBASE_URI . '.json', $firebase->getPathURI('/'));
+        self::assertEquals(self::FIREBASE_URI . '.json', $fb->getPathURI());
+        self::assertEquals(self::FIREBASE_URI . '.json', $fb->getPathURI('/'));
 
-        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('path'));
-        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('/path/'));
-        self::assertEquals(self::FIREBASE_URI . 'path.json', $firebase->getPathURI('//path//'));
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $fb->getPathURI('path'));
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $fb->getPathURI('/path/'));
+        self::assertEquals(self::FIREBASE_URI . 'path.json', $fb->getPathURI('//path//'));
 
-        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('path/to/your'));
-        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('/path/to/your/'));
-        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $firebase->getPathURI('//path/to/your//'));
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $fb->getPathURI('path/to/your'));
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $fb->getPathURI('/path/to/your/'));
+        self::assertEquals(self::FIREBASE_URI . 'path/to/your.json', $fb->getPathURI('//path/to/your//'));
 
     }
 
     public function testGet()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
 
-        $response = $firebase->get();
+        $response = $fb->get();
         self::assertEquals(200, $response->status());
     }
 
     public function testPut()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
         $subPath = 'put_test';
 
-        $response = $firebase->put($subPath, array(
+        $response = $fb->put($subPath, array(
             'data' => self::data()
         ));
 
@@ -75,10 +76,10 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testPost()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
         $subPath = 'post_test';
 
-        $response = $firebase->post($subPath, array(
+        $response = $fb->post($subPath, array(
             'data' => self::data()
         ));
 
@@ -88,14 +89,14 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testPatch()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
         $subPath = 'patch_test';
 
-        $firebase->put($subPath, array(
+        $fb->put($subPath, array(
             'data' => self::data()
         ));
 
-        $response = $firebase->patch($subPath, array(
+        $response = $fb->patch($subPath, array(
             'data' => array(
                 'number' => 2,
                 'string' => 'hello2'
@@ -109,28 +110,28 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
         $subPath = 'delete_test';
 
-        $firebase->put($subPath, array(
+        $fb->put($subPath, array(
             'data' => self::data()
         ));
 
         $subPath = 'delete_test/number';
 
-        $response = $firebase->delete($subPath);
+        $response = $fb->delete($subPath);
 
         self::assertEquals(200, $response->status());
     }
 
     public function testGetShallow()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
         $subPath = 'get_shallow_test';
 
-        $firebase->put($subPath, array('data' => self::data()));
+        $fb->put($subPath, array('data' => self::data()));
 
-        $response = $firebase->getShallow($subPath);
+        $response = $fb->getShallow($subPath);
         self::assertEquals(200, $response->status());
         self::assertTrue($response->json()->number);
         self::assertTrue($response->json()->string);
@@ -138,12 +139,12 @@ class JCFirebaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetPrint()
     {
-        $firebase = self::$firebase;
+        $fb = self::$firebase;
 
-        self::assertContains(" ", $firebase->get(null, array(
+        self::assertContains(" ", $fb->get(null, array(
             Option::OPT_PRINT => PrintType::PRETTY
         ))->body());
 
-        self::assertTrue($firebase->isValid());
+        self::assertTrue($fb->isValid());
     }
 }
