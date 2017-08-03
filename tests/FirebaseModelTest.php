@@ -32,6 +32,7 @@ class FirebaseModelTest extends PHPUnit_Framework_TestCase {
 		self::assertNotEmpty( $log->key );
 
 		$logCopy = Log::findByKey( $log->key, self::$firebase );
+		$logCopy->setNodeName('data/logCopy');
 
 		self::assertNotEmpty( $logCopy->key );
 		self::assertEquals( $log->code, $logCopy->code );

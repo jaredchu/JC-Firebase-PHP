@@ -48,6 +48,11 @@ class FirebaseModel
         return static::$nodeName ?: strtolower((new \ReflectionClass(get_called_class()))->getShortName());
     }
 
+    public static function setNodeName($nodeName)
+    {
+        static::$nodeName = $nodeName;
+    }
+
     /**
      * @return array
      */
