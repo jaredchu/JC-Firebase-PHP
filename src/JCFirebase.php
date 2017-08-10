@@ -24,6 +24,9 @@ class JCFirebase
 
     public $rootPath;
 
+    /**
+     * @var array
+     */
     public $requestHeader = array(
         'accept' => 'application/json',
         'contentType' => 'application/json; charset=utf-8',
