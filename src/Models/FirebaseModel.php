@@ -124,8 +124,7 @@ class FirebaseModel
         $response = $firebase->get(self::getNodeName() . '/' . $key);
         $object = null;
         if ($response->success() && $response->body() != 'null') {
-            $mapper = new JsonMapper();
-            $object = $mapper->map($response->json(), new static());
+            $object = self::map($response->json(), new static());
             $object->key = $key;
             $object->firebase = $firebase;
         }
@@ -146,8 +145,7 @@ class FirebaseModel
         $jsonObject = json_decode($response->body(), true);
         if ($response->success() && count($jsonObject)) {
             do {
-                $mapper = new JsonMapper();
-                $object = $mapper->map((object)current($jsonObject), new static());
+                $object = self::map((object)current($jsonObject), new static());
                 $object->key = key($jsonObject);
                 $object->firebase = $firebase;
                 $objects[] = $object;
@@ -155,5 +153,11 @@ class FirebaseModel
         }
 
         return $objects;
+    }
+
+    protected static function map($object, $instance)
+    {
+        $mapper = new JsonMapper();
+        return $mapper->map($object, $instance);
     }
 }
