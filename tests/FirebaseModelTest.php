@@ -13,7 +13,7 @@ use JCFirebase\Models\Log;
 class FirebaseModelTest extends PHPUnit_Framework_TestCase
 {
     const FIREBASE_URI = 'https://fir-php-test-c7fa2.firebaseio.com/';
-    const KEY_FILE = '/resource/firebase-php-test-0a49b34e5f4a.json';
+    const KEY_FILE = __DIR__ . '/../resource/firebase-php-test-0a49b34e5f4a.json';
 
     /**
      * @var JCFirebase
@@ -22,7 +22,7 @@ class FirebaseModelTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, getcwd() . self::KEY_FILE);
+        self::$firebase = JCFirebase::fromKeyFile(self::FIREBASE_URI, self::KEY_FILE);
     }
 
     public function testCreateLog()
@@ -97,5 +97,28 @@ class FirebaseModelTest extends PHPUnit_Framework_TestCase
         $log->save();
 
         self::assertEquals(10, Log::findByKey(10, self::$firebase)->key);
+    }
+
+    public function testAttributeMapping()
+    {
+        Log::setMaps([
+            'code' => 'code_number',
+            'message' => 'status'
+        ]);
+
+        Log::setNodeName('data/LogAttr');
+
+        $log = new Log(self::$firebase);
+        $log->code = 200;
+        $log->message = 'Success';
+
+        self::assertTrue($log->create());
+        self::assertNotEmpty($log->key);
+
+        $logCopy = Log::findByKey($log->key, self::$firebase);
+
+        self::assertNotEmpty($logCopy->key);
+        self::assertEquals($log->code, $logCopy->code);
+        self::assertEquals($log->message, $logCopy->message);
     }
 }
