@@ -97,7 +97,7 @@ class FirebaseModel
      */
     public function create()
     {
-        $response = $this->firebase->post(self::getNodeName(), array(
+        $response = $this->firebase->post(static::getNodeName(), array(
             'data' => $this->getData()
         ));
 
@@ -113,7 +113,7 @@ class FirebaseModel
     public function save()
     {
         if (!empty($this->key)) {
-            $response = $this->firebase->put(self::getNodeName() . '/' . $this->key, array(
+            $response = $this->firebase->put(static::getNodeName() . '/' . $this->key, array(
                 'data' => $this->getData()
             ));
 
@@ -132,7 +132,7 @@ class FirebaseModel
     {
         $success = false;
         if (!empty($this->key)) {
-            $response = $this->firebase->delete(self::getNodeName() . '/' . $this->key);
+            $response = $this->firebase->delete(static::getNodeName() . '/' . $this->key);
 
             $success = $response->success();
         }
@@ -148,10 +148,10 @@ class FirebaseModel
      */
     public static function findByKey($key, JCFirebase $firebase)
     {
-        $response = $firebase->get(self::getNodeName() . '/' . $key);
+        $response = $firebase->get(static::getNodeName() . '/' . $key);
         $object = null;
         if ($response->success() && $response->body() != 'null') {
-            $object = self::map($response->json(), new static());
+            $object = static::map($response->json(), new static());
             $object->key = $key;
             $object->firebase = $firebase;
         }
@@ -166,13 +166,13 @@ class FirebaseModel
      */
     public static function findAll(JCFirebase $firebase)
     {
-        $response = $firebase->get(self::getNodeName());
+        $response = $firebase->get(static::getNodeName());
         $objects = array();
 
         $jsonObject = json_decode($response->body(), true);
         if ($response->success() && count($jsonObject)) {
             do {
-                $object = self::map((object)current($jsonObject), new static());
+                $object = static::map((object)current($jsonObject), new static());
                 $object->key = key($jsonObject);
                 $object->firebase = $firebase;
                 $objects[] = $object;
@@ -200,7 +200,7 @@ class FirebaseModel
      */
     protected static function mapAttributes(array $objectVars, $fromLocal = true)
     {
-        foreach (static::$maps as $localAttr => $DBAttr) {
+        foreach (static::getMaps() as $localAttr => $DBAttr) {
             if ($fromLocal) {
                 $objectVars[$DBAttr] = $objectVars[$localAttr];
                 unset($objectVars[$localAttr]);
