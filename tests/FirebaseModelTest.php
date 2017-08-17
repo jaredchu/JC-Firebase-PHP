@@ -7,6 +7,8 @@
  * Time: 11:01 AM
  */
 
+require(__DIR__.'/../vendor/autoload.php');
+
 use JCFirebase\JCFirebase;
 use JCFirebase\Models\Log;
 

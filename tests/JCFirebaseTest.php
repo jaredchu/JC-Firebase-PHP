@@ -7,9 +7,10 @@
  * Time: 4:07 PM
  */
 
+require(__DIR__.'/../vendor/autoload.php');
+
 use JCFirebase\Enums\PrintType;
 use JCFirebase\JCFirebase;
-use JCFirebase\OAuth;
 use JCFirebase\Option;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
