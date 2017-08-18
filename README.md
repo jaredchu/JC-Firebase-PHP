@@ -5,13 +5,13 @@
 [![Packagist](https://img.shields.io/packagist/dt/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
 [![Travis](https://img.shields.io/travis/jaredchu/JC-Firebase-PHP.svg)](https://travis-ci.org/jaredchu/JC-Firebase-PHP)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/jaredchu/JC-Firebase-PHP.svg)](https://scrutinizer-ci.com/g/jaredchu/JC-Firebase-PHP/)
-[![Scrutinizer branch](https://img.shields.io/scrutinizer/coverage/g/jaredchu/JC-Firebase-PHP/master.svg)](https://scrutinizer-ci.com/g/jaredchu/JC-Firebase-PHP/)
+[![Codecov](https://img.shields.io/codecov/c/github/jaredchu/JC-Firebase-PHP.svg)](https://codecov.io/gh/jaredchu/JC-Firebase-PHP)
 [![Packagist](https://img.shields.io/packagist/l/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
 
 ## Installation
 `$ composer require jaredchu/jc-firebase-php`
 
-## Simple usage
+## Usage
 Generate a [private key in JSON format](https://cloud.google.com/storage/docs/authentication#service_accounts).
 <img src="http://i.imgur.com/MQ5WHBF.png">
 
