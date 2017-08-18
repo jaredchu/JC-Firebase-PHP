@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "PHP": ">=5.5",
         "firebase/php-jwt": "^4.0",
         "netresearch/jsonmapper": "^1.1",
         "jaredchu/jc-request": "^1.0"
