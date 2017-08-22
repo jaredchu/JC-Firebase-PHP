@@ -7,6 +7,7 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/jaredchu/JC-Firebase-PHP.svg)](https://scrutinizer-ci.com/g/jaredchu/JC-Firebase-PHP/)
 [![Codecov](https://img.shields.io/codecov/c/github/jaredchu/JC-Firebase-PHP.svg)](https://codecov.io/gh/jaredchu/JC-Firebase-PHP)
 [![Packagist](https://img.shields.io/packagist/l/jaredchu/JC-Firebase-PHP.svg)](https://packagist.org/packages/jaredchu/jc-firebase-php)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP?ref=badge_shield)
 
 ## Installation
 `$ composer require jaredchu/jc-firebase-php`
@@ -128,3 +129,6 @@ $log->delete();
 
 ## License
 [MIT License](https://github.com/jaredchu/JC-Firebase-PHP/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP?ref=badge_large)
