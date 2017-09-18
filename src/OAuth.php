@@ -23,9 +23,6 @@ class OAuth
     protected $expireTimestamp;
     protected $accessToken;
 
-    protected $cache;
-    const CACHE_KEY = 'firebase-oauth';
-
     /**
      * OAuth constructor.
      *
@@ -33,35 +30,34 @@ class OAuth
      * @param $iss
      * @param $lifeTime
      */
-    public function __construct($key, $iss, $lifeTime = 3600, $cache = false)
+    public function __construct($key, $iss, $lifeTime = 3600)
     {
         $this->key = $key;
         $this->iss = $iss;
         $this->tokenLifeTime = $lifeTime;
-        $this->cache = $cache;
     }
 
-    public static function fromJson($jsonString, $lifeTime = 3600, $cache = false)
+    public static function fromJson($jsonString, $lifeTime = 3600)
     {
         if ($jsonString) {
             $privateKey = $jsonString->private_key;
             $serviceAccount = $jsonString->client_email;
 
-            return new static($privateKey, $serviceAccount, $lifeTime, $cache);
+            return new static($privateKey, $serviceAccount, $lifeTime);
         } else {
             throw new \Exception("can't get data from key file");
         }
     }
 
-    public static function fromKeyFile($keyFile, $lifeTime = 3600, $cache = false)
+    public static function fromKeyFile($keyFile, $lifeTime = 3600)
     {
         try {
             $jsonString = json_decode(file_get_contents($keyFile));
         } catch (\Exception $exception) {
-            $jsonString = json_decode(JCRequest::get($keyFile));
+            $jsonString = JCRequest::get($keyFile)->json();
         }
 
-        return static::fromJson($jsonString, $lifeTime, $cache);
+        return static::fromJson($jsonString, $lifeTime);
     }
 
     protected function requestAccessToken()
