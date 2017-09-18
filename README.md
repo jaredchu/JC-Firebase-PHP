@@ -18,7 +18,7 @@ Generate a [private key in JSON format](https://cloud.google.com/storage/docs/au
 
 #### Check Firebase credential
 ```php
-use JCFirebase\JCFirebase;
+use JC\Firebase\JCFirebase;
 
 $firebaseURI = "https://<DATABASE_NAME>.firebaseio.com";
 $jsonKeyFile = "path/to/serviceAccountKey.json";
@@ -65,7 +65,7 @@ echo $response->body;
 
 #### Create Firebase connector
 ```php
-use JCFirebase\JCFirebase;
+use JC\Firebase\JCFirebase;
 
 $firebaseURI = "https://<DATABASE_NAME>.firebaseio.com";
 $jsonKeyFile = "path/to/serviceAccountKey.json";
