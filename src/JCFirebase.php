@@ -9,7 +9,7 @@
 namespace JCFirebase;
 
 use JC\JCRequest;
-use JC\JCResponse;
+use JC\JCResponseInterface;
 use JCFirebase\Enums\PrintType;
 use JCFirebase\Enums\RequestType;
 
@@ -39,7 +39,6 @@ class JCFirebase
      * @var OAuth
      */
     public $auth;
-
 
     /**
      * JCFirebase constructor.
@@ -134,7 +133,7 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return JCResponse
+     * @return JCResponseInterface
      */
     public function get($path = '', $options = array())
     {
@@ -149,7 +148,7 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return JCResponse
+     * @return JCResponseInterface
      */
     public function put($path = '', $options = array())
     {
@@ -163,7 +162,7 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return JCResponse
+     * @return JCResponseInterface
      */
     public function post($path = '', $options = array())
     {
@@ -178,7 +177,7 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return JCResponse
+     * @return JCResponseInterface
      */
     public function patch($path = '', $options = array())
     {
@@ -193,7 +192,7 @@ class JCFirebase
      * @param string $path
      * @param array $options
      *
-     * @return JCResponse
+     * @return JCResponseInterface
      */
     public function delete($path = '', $options = array())
     {
