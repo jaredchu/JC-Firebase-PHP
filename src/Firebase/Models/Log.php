@@ -6,7 +6,7 @@
  * Time: 11:03 AM
  */
 
-namespace JCFirebase\Models;
+namespace JC\Firebase\Models;
 
 class Log extends FirebaseModel
 {

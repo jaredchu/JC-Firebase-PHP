@@ -20,7 +20,7 @@
     },
     "autoload": {
       "psr-4": {
-        "JCFirebase\\": "src"
+        "JC\\": "src"
       }
     },
     "keywords": [

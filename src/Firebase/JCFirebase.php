@@ -6,12 +6,13 @@
  * Time: 3:47 PM
  */
 
-namespace JCFirebase;
+namespace JC\Firebase;
 
 use JC\JCRequest;
 use JC\JCResponseInterface;
-use JCFirebase\Enums\PrintType;
-use JCFirebase\Enums\RequestType;
+use JC\Firebase\Enums\PrintType;
+use JC\Firebase\Enums\RequestType;
+use JC\Firebase\OAuth;
 
 /**
  * Class JCFirebase

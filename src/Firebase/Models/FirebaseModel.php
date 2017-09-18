@@ -6,9 +6,9 @@
  * Time: 2:25 PM
  */
 
-namespace JCFirebase\Models;
+namespace JC\Firebase\Models;
 
-use JCFirebase\JCFirebase;
+use JC\Firebase\JCFirebase;
 use JsonMapper;
 
 /**
@@ -41,7 +41,7 @@ class FirebaseModel
     /**
      * FirebaseModel constructor.
      *
-     * @param \JCFirebase\JCFirebase $firebase
+     * @param \JC\Firebase\JCFirebase $firebase
      */
     public function __construct(JCFirebase $firebase = null)
     {

@@ -9,8 +9,8 @@
 
 require(__DIR__.'/../vendor/autoload.php');
 
-use JCFirebase\JCFirebase;
-use JCFirebase\Models\Log;
+use JC\Firebase\JCFirebase;
+use JC\Firebase\Models\Log;
 
 class FirebaseModelTest extends PHPUnit_Framework_TestCase
 {

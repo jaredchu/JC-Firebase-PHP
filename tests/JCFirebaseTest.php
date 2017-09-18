@@ -9,9 +9,9 @@
 
 require(__DIR__.'/../vendor/autoload.php');
 
-use JCFirebase\Enums\PrintType;
-use JCFirebase\JCFirebase;
-use JCFirebase\Option;
+use JC\Firebase\Enums\PrintType;
+use JC\Firebase\JCFirebase;
+use JC\Firebase\Option;
 
 class JCFirebaseTest extends PHPUnit_Framework_TestCase
 {

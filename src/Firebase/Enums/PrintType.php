@@ -7,7 +7,7 @@
  * Time: 10:57 PM
  */
 
-namespace JCFirebase\Enums;
+namespace JC\Firebase\Enums;
 
 class PrintType
 {

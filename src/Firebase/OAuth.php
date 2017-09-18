@@ -6,7 +6,7 @@
  * Time: 4:25 PM
  */
 
-namespace JCFirebase;
+namespace JC\Firebase;
 
 use Firebase\JWT\JWT;
 use JC\JCRequest;
