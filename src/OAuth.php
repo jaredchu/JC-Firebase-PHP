@@ -54,10 +54,14 @@ class OAuth
         try {
             $jsonString = json_decode(file_get_contents($keyFile));
         } catch (\Exception $exception) {
-            $jsonString = JCRequest::get($keyFile)->json();
+            $jsonString = static::getClient()->get($keyFile)->json();
         }
 
         return static::fromJson($jsonString, $lifeTime);
+    }
+
+    public static function getClient(){
+        return Client::getClient();
     }
 
     protected function requestAccessToken()
@@ -73,7 +77,7 @@ class OAuth
         );
         $jwt = JWT::encode($jsonToken, $this->key, 'RS256');
 
-        $OAuthResponse = JCRequest::post('https://www.googleapis.com/oauth2/v4/token', array(
+        $OAuthResponse = static::getClient()->post('https://www.googleapis.com/oauth2/v4/token', array(
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             'assertion' => $jwt
         ));

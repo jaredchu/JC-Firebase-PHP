@@ -8,11 +8,9 @@
 
 namespace JC\Firebase;
 
-use JC\JCRequest;
-use JC\JCResponseInterface;
 use JC\Firebase\Enums\PrintType;
 use JC\Firebase\Enums\RequestType;
-use JC\Firebase\OAuth;
+use JC\HttpClient\JCResponseInterface;
 
 /**
  * Class JCFirebase
@@ -41,6 +39,8 @@ class JCFirebase
      */
     public $auth;
 
+    public $client;
+
     /**
      * JCFirebase constructor.
      *
@@ -53,6 +53,7 @@ class JCFirebase
         $this->firebaseURI = $firebaseURI;
         $this->rootPath = $rootPath;
         $this->auth = $auth;
+        $this->client = Client::getClient();
     }
 
 
@@ -121,7 +122,7 @@ class JCFirebase
 
     public function getShallow($path = '', $options = array())
     {
-        return JCRequest::get(
+        return $this->client->get(
             $this->getPathURI($path) . '?' . http_build_query(array(
                 Option::OPT_SHALLOW => 'true'
             )),
@@ -138,7 +139,7 @@ class JCFirebase
      */
     public function get($path = '', $options = array())
     {
-        return JCRequest::get(
+        return $this->client->get(
             $this->addDataToPathURI($path, $options),
             $this->addDataToRequest($options),
             $this->requestHeader
@@ -153,7 +154,7 @@ class JCFirebase
      */
     public function put($path = '', $options = array())
     {
-        return JCRequest::put($this->getPathURI($path),
+        return $this->client->put($this->getPathURI($path),
             $this->addDataToRequest($options, true),
             $this->requestHeader
         );
@@ -167,7 +168,7 @@ class JCFirebase
      */
     public function post($path = '', $options = array())
     {
-        return JCRequest::post(
+        return $this->client->post(
             $this->getPathURI($path),
             $this->addDataToRequest($options, true),
             $this->requestHeader
@@ -182,7 +183,7 @@ class JCFirebase
      */
     public function patch($path = '', $options = array())
     {
-        return JCRequest::patch(
+        return $this->client->patch(
             $this->getPathURI($path),
             $this->addDataToRequest($options, true),
             $this->requestHeader
@@ -197,7 +198,7 @@ class JCFirebase
      */
     public function delete($path = '', $options = array())
     {
-        return JCRequest::delete(
+        return $this->client->delete(
             $this->getPathURI($path),
             $this->addDataToRequest($options),
             $this->requestHeader

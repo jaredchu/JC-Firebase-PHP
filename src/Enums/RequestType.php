@@ -9,7 +9,7 @@
 
 namespace JC\Firebase\Enums;
 
-use JC\Enums\Method;
+use JC\HttpClient\Enums\Method;
 
 class RequestType extends Method
 {
