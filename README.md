@@ -132,3 +132,8 @@ $log->delete();
 
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fjaredchu%2FJC-Firebase-PHP?ref=badge_large)
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/jaredchu/JC-Firebase-PHP/badge.svg?style=beer-square)](https://beerpay.io/jaredchu/JC-Firebase-PHP)  [![Beerpay](https://beerpay.io/jaredchu/JC-Firebase-PHP/make-wish.svg?style=flat-square)](https://beerpay.io/jaredchu/JC-Firebase-PHP?focus=wish)
