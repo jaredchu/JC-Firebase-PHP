@@ -40,8 +40,10 @@ class OAuth
     public static function fromJson($jsonString, $lifeTime = 3600)
     {
         if ($jsonString) {
-            $privateKey = $jsonString->private_key;
-            $serviceAccount = $jsonString->client_email;
+            $jsonObject = json_decode($jsonString);
+
+            $privateKey = $jsonObject->private_key;
+            $serviceAccount = $jsonObject->client_email;
 
             return new static($privateKey, $serviceAccount, $lifeTime);
         } else {
@@ -52,9 +54,9 @@ class OAuth
     public static function fromKeyFile($keyFile, $lifeTime = 3600)
     {
         try {
-            $jsonString = json_decode(file_get_contents($keyFile));
+            $jsonString = file_get_contents($keyFile);
         } catch (\Exception $exception) {
-            $jsonString = static::getClient()->get($keyFile)->json();
+            $jsonString = static::getClient()->get($keyFile)->body();
         }
 
         return static::fromJson($jsonString, $lifeTime);
